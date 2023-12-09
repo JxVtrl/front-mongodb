@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
-      <AppProvider>
+        <AppProvider>
         <main className={`${inter.className} ${montserrat.className}`}>
           <SeatModal/>
           <Header />
