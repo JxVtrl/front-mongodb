@@ -9,4 +9,7 @@ module.exports = {
 
     return config;
   },
+  images: {
+    domains: ['localhost', 'res.cloudinary.com'],
+  },
 };

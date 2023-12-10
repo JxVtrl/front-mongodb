@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as faceApi from "face-api.js";
 import { useApp } from "@/contexts/contextApi";
+import * as cloudinary from "cloudinary-core";
 
 export default function FaceIdWidget() {
   const { recognitionModal } = useApp();
@@ -63,15 +64,26 @@ export default function FaceIdWidget() {
 
     const labeledFaceDescriptors = facesMock.map(async (face) => {
       const descriptors = face.descriptors.map((url) => {
-        const img = new Image();
-        img.src = url;
+        const cloudinaryCore = new cloudinary.Cloudinary({
+          cloud_name: "dppimfdxy",
+          api_key: "893146136213397",
+          api_secret: "vHvFad6vFvYL2fSzZXtl38ahSMQ",
+          secure: true,
+        });
+        const response = cloudinaryCore.url(url, {
+          resource_type: "image",
+        })
+        console.log(response);
+
+        const img = document.createElement("img");
+        img.crossOrigin = "anonymous";
+        img.src = response;
+
         return faceApi
           .detectSingleFace(img)
           .withFaceLandmarks()
           .withFaceDescriptor();
       });
-
-      console.log(descriptors);
 
       const float32Array = await transformDescriptors(descriptors);
 
