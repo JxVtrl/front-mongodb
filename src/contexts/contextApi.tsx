@@ -14,6 +14,7 @@ type User = {
   password: string
   confirmPassword: string
   role: string
+  cpf?: string
 }
 
 interface ContextProps {

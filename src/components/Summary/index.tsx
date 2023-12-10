@@ -1,32 +1,32 @@
-"use client"
-import LocationIcon from "@/assets/icons/LocationIcon"
-import PersonIcon from "@/assets/icons/PersonIcon"
-import { useApp } from "@/contexts/contextApi"
-import { checkout } from "@/utils/backend_functions/checkout"
-import { format_hour } from "@/utils/functions"
-import React from "react"
+"use client";
+import LocationIcon from "@/assets/icons/LocationIcon";
+import PersonIcon from "@/assets/icons/PersonIcon";
+import { useApp } from "@/contexts/contextApi";
+import { checkout } from "@/utils/backend_functions/checkout";
+import { format_hour } from "@/utils/functions";
+import React from "react";
 
 const Summary: React.FC = () => {
   const { passengersInfo, selectedRoute, checkoutStep, setCheckoutStep } =
-    useApp()
-  const [loading, setLoading] = React.useState(false)
+    useApp();
+  const [loading, setLoading] = React.useState(false);
 
   const checkIfPassengersInfoIsFilled = () => {
     const isFilled = passengersInfo.every((passengerInfo) => {
       return (
         passengerInfo.passenger.name !== "" &&
         passengerInfo.passenger.cpf !== ""
-      )
-    })
+      );
+    });
 
-    return isFilled
-  }
+    return isFilled;
+  };
 
   const handleCheckout = async () => {
-    setLoading(true)
-  }
+    setLoading(true);
+  };
 
-  if (!selectedRoute) return null
+  if (!selectedRoute) return null;
 
   return (
     <div className="flex flex-col gap-4 w-full overflow-y-auto h-[600px] bg-gray-100 rounded-xl p-5 shadow-md">
@@ -88,6 +88,18 @@ const Summary: React.FC = () => {
             {passengersInfo.length}{" "}
             {passengersInfo.length > 1 ? "passageiros" : "passageiro"}
           </span>
+          {checkoutStep === 1 && (
+            <span
+              className="text-blue-500 cursor-pointer
+              text-xs
+              hover:text-blue-600 transition duration-200 ease-in-out
+              
+              "
+              onClick={() => setCheckoutStep(0)}
+            >
+              Editar <b>passageiros</b>
+            </span>
+          )}
         </div>
       </div>
       <button
@@ -98,9 +110,9 @@ const Summary: React.FC = () => {
         } rounded-xl p-2 shadow-md`}
         disabled={!checkIfPassengersInfoIsFilled() || loading}
         onClick={() => {
-          if (checkoutStep === 0) setCheckoutStep(checkoutStep + 1)
+          if (checkoutStep === 0) setCheckoutStep(checkoutStep + 1);
           else {
-            handleCheckout()
+            handleCheckout();
           }
         }}
       >
@@ -113,7 +125,7 @@ const Summary: React.FC = () => {
           : "Finalizar compra"}
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default Summary
+export default Summary;

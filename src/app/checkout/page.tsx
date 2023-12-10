@@ -14,8 +14,7 @@ const Page: React.FC = () => {
   
   useEffect(() => {
   setCheckoutStep(0)
-  
-  }, [])
+  }, [setCheckoutStep])
 
   if (!seatsSelected || seatsSelected.length === 0)
     return (
