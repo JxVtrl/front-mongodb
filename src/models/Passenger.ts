@@ -1,7 +1,7 @@
 import { Schema, models, model } from "mongoose"
 
 const passengerSchema = new Schema({
-  seats: {
+  seat: {
     type: Schema.Types.ObjectId,
     ref: "Seat",
   },

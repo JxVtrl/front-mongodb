@@ -1,32 +1,32 @@
 import { Ticket } from "@/models/Ticket"
 import connectMongoDB from "@/assets/lib/database"
 
-export async function POST(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const passengerName = searchParams.get("passengerName")
-  const passengerEmail = searchParams.get("passengerEmail")
-  const departureCity = searchParams.get("departureCity")
-  const arrivalCity = searchParams.get("arrivalCity")
-  const departureDate = searchParams.get("departureDate")
-  const seatNumber = searchParams.get("seatNumber")
-  const totalPrice = searchParams.get("totalPrice")
-  const paymentMethod = searchParams.get("paymentMethod")
-  const user = searchParams.get("user")
+export async function POST(req: any) {
+  const { user, quantidadeDePassageiros, rota, precoTotal, passageiros } = req.body
+
+
+  if (!user.email ) return new Response("Usuário não informado!", { status: 400 })
+  
+  if (!quantidadeDePassageiros) return new Response("Quantidade de passageiros não informado!", { status: 400 })
+
+  if (!rota) return new Response("Rota não informado!", { status: 400 })
+
+  if (!precoTotal) return new Response("Preço total não informado!", { status: 400 })
+
+  if (!passageiros) return new Response("Passageiros não informado!", { status: 400 })
 
   try {
     await connectMongoDB()
 
     Ticket.create({
-      passengerName,
-      passengerEmail,
-      departureCity,
-      arrivalCity,
-      departureDate,
-      seatNumber,
-      totalPrice,
-      paymentMethod,
       user,
+      quantidadeDePassageiros,
+      rota,
+      precoTotal,
+      passageiros,
     })
+
+    return new Response("Ticket criado com sucesso!", { status: 200 })
   } catch (err: any) {
     new Response(err.message, { status: 500 })
   }

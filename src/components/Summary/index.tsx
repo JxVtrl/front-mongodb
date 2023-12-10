@@ -3,12 +3,24 @@ import LocationIcon from "@/assets/icons/LocationIcon";
 import PersonIcon from "@/assets/icons/PersonIcon";
 import { useApp } from "@/contexts/contextApi";
 import { format_hour } from "@/utils/functions";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const Summary: React.FC = () => {
-  const { passengersInfo, selectedRoute, checkoutStep, setCheckoutStep } =
-    useApp();
+  const {
+    passengersInfo,
+    selectedRoute,
+    checkoutStep,
+    setCheckoutStep,
+    user,
+    setModalAgradecimento,
+    setCompraRealizada,
+    compraRealizada
+  } = useApp();
+
   const [loading, setLoading] = React.useState(false);
+
+  const router = useRouter();
 
   const checkIfPassengersInfoIsFilled = () => {
     const isFilled = passengersInfo.every((passengerInfo) => {
@@ -21,12 +33,47 @@ const Summary: React.FC = () => {
     return isFilled;
   };
 
-  const checkIfPaymentIsFilled = () => {
-    return false;
-  }
-
   const handleCheckout = async () => {
     setLoading(true);
+
+    try {
+      const response = await fetch("/api/ticket/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user,
+          quantidadeDePassageiros: passengersInfo.length,
+          rota: selectedRoute,
+          precoTotal: selectedRoute?.valor || 100 * passengersInfo.length,
+          passageiros: passengersInfo.map((passengerInfo) => {
+            return {
+              nome: passengerInfo.passenger.name,
+              cpf: passengerInfo.passenger.cpf,
+              seat: passengerInfo.seat,
+            };
+          }),
+        }),
+      });
+      const status = response.status;
+
+      setCompraRealizada(status === 200)
+
+      if (status !== 200) throw new Error('Erro ao realizar compra')
+
+      setTimeout(() => {
+        router.push('/')
+      }, 1500);
+
+      setTimeout(() => {
+        setModalAgradecimento(true);
+      }, 2500);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!selectedRoute) return null;
@@ -125,7 +172,7 @@ const Summary: React.FC = () => {
           ? !checkIfPassengersInfoIsFilled()
             ? "Preencha os dados"
             : "Continuar"
-          : "Finalizar compra"}
+          : compraRealizada ? 'Obrigado!' :"Finalizar compra"}
       </button>
     </div>
   );
