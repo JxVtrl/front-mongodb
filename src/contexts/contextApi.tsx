@@ -54,13 +54,15 @@ interface ContextProps {
   paymentType: "credit_card" | "pix" | "boleto";
   setPaymentType: React.Dispatch<
     React.SetStateAction<"credit_card" | "pix" | "boleto">
-  >;
-  modalAgradecimento: boolean;
-  setModalAgradecimento: React.Dispatch<React.SetStateAction<boolean>>;
-  compraRealizada: boolean;
-  setCompraRealizada: React.Dispatch<React.SetStateAction<boolean>>;
+  >
+  modalAgradecimento: boolean
+  setModalAgradecimento: React.Dispatch<React.SetStateAction<boolean>>
+  compraRealizada: boolean
+  setCompraRealizada: React.Dispatch<React.SetStateAction<boolean>>
   recognitionModal: boolean;
   setRecognitionModal: React.Dispatch<React.SetStateAction<boolean>>;
+  userProfileImage: string;
+  setUserProfileImage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AppContext = createContext<ContextProps>({} as ContextProps);
@@ -89,6 +91,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   >([]);
   const [modalAgradecimento, setModalAgradecimento] = useState(false);
   const [compraRealizada, setCompraRealizada] = useState(false);
+
+  const [userProfileImage, setUserProfileImage] = useState<string>('');
 
   const fetchRotas = async () => {
     const rotas_local = localStorage.getItem("rotas");
@@ -136,17 +140,15 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setSeatsSelected,
     passengersInfo,
     setPassengersInfo,
-    checkoutStep,
-    setCheckoutStep,
-    paymentType,
-    setPaymentType,
-    modalAgradecimento,
-    setModalAgradecimento,
-    compraRealizada,
-    setCompraRealizada,
-    recognitionModal,
+    checkoutStep, setCheckoutStep,
+    paymentType, setPaymentType,
+    modalAgradecimento, setModalAgradecimento,
+    compraRealizada, setCompraRealizada,
+    userProfileImage,
+    setUserProfileImage,
+      recognitionModal,
     setRecognitionModal,
-  };
+  }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

@@ -5,20 +5,27 @@ export async function POST(req: any, res: any) {
   const { searchParams } = new URL(req.url)
   const id = searchParams.get("id")
 
-  const { origem, destino, horaPartida, dataPartida, passagens } = req.body
+
+  const { origin, destination, departureTime, departureDate, tickets} = req.body
+  
+  console.log("d: ", destination)
+  console.log("o: ", origin)
 
   if (!id) return new Response("id is required", { status: 400 })
 
   try {
     await connectMongoDB()
-    
+    console.log(id)
+    console.log('aaa')
+
     const route = await Route.create({
-      origem,
-      destino,
-      horaPartida,
-      dataPartida,
-      passagens,
+      origin,
+      destination,
+      departureTime,
+      departureDate,
+      tickets,
     })
+
 
     if (!route) {
       return new Response("Rota não encontrada", { status: 400 })
