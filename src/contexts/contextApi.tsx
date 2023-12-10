@@ -59,6 +59,9 @@ interface ContextProps {
   setModalAgradecimento: React.Dispatch<React.SetStateAction<boolean>>
   compraRealizada: boolean
   setCompraRealizada: React.Dispatch<React.SetStateAction<boolean>>
+
+  userProfileImage: string;
+  setUserProfileImage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const AppContext = createContext<ContextProps>({} as ContextProps)
@@ -83,6 +86,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     >([])
     const [modalAgradecimento, setModalAgradecimento] = useState(false);
   const [compraRealizada, setCompraRealizada] = useState(false);
+
+  const [userProfileImage, setUserProfileImage] = useState<string>('');
 
   const fetchRotas = async () => {
     const rotas_local = localStorage.getItem("rotas")
@@ -133,7 +138,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     checkoutStep, setCheckoutStep,
     paymentType, setPaymentType,
     modalAgradecimento, setModalAgradecimento,
-    compraRealizada, setCompraRealizada
+    compraRealizada, setCompraRealizada,
+    userProfileImage,
+    setUserProfileImage,
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
