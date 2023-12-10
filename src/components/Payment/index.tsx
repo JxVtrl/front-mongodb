@@ -1,13 +1,24 @@
-import { useApp } from "@/contexts/contextApi"
-import React from "react"
+import { useApp } from "@/contexts/contextApi";
+import React from "react";
 
 const Payment: React.FC = () => {
-  const { selectedRoute } = useApp()
-  const [selectedPayment, setSelectedPayment] = React.useState<number>(0)
+  const { paymentType, setPaymentType } = useApp();
+  const [creditCardInfos, setCreditCardInfos] = React.useState({
+    card_number: "",
+    card_name: "",
+    card_expiration: "",
+    card_cvv: "",
+  });
 
-  const payment_types = [
+  const payment_types: {
+    title: string;
+    type: "credit_card" | "pix" | "boleto";
+    icon: JSX.Element;
+    form: JSX.Element;
+  }[] = [
     {
       title: "Cartão de crédito",
+      type: "credit_card",
       icon: (
         <svg
           viewBox="0 0 1024 1024"
@@ -23,19 +34,51 @@ const Payment: React.FC = () => {
           <input
             className="w-full p-2 border-2 border-gray-300 rounded-lg"
             placeholder="Número do cartão"
+            onChange={(e) => {
+              const value = e.target.value;
+              setCreditCardInfos((prevState) => ({
+                ...prevState,
+                card_number: value,
+              }));
+            }}
+            value={creditCardInfos.card_number}
           />
           <input
             className="w-full p-2 border-2 border-gray-300 rounded-lg"
             placeholder="Nome impresso no cartão"
+            onChange={(e) => {
+              const value = e.target.value;
+              setCreditCardInfos((prevState) => ({
+                ...prevState,
+                card_name: value,
+              }));
+            }}
+            value={creditCardInfos.card_name}
           />
           <div className="flex flex-row gap-2 items-center justify-between w-full rounded-lg">
             <input
               className="w-full p-2 border-2 border-gray-300 rounded-lg"
               placeholder="Validade"
+              onChange={(e) => {
+                const value = e.target.value;
+                setCreditCardInfos((prevState) => ({
+                  ...prevState,
+                  card_expiration: value,
+                }));
+              }}
+              value={creditCardInfos.card_expiration}
             />
             <input
               className="w-full p-2 border-2 border-gray-300 rounded-lg"
               placeholder="CVV"
+              onChange={(e) => {
+                const value = e.target.value;
+                setCreditCardInfos((prevState) => ({
+                  ...prevState,
+                  card_cvv: value,
+                }));
+              }}
+              value={creditCardInfos.card_cvv}
             />
           </div>
         </div>
@@ -43,6 +86,7 @@ const Payment: React.FC = () => {
     },
     {
       title: "Boleto",
+      type: "boleto",
       icon: (
         <svg viewBox="0 0 24 24" fill="currentColor" height="20px" width="20px">
           <path d="M13 16H7a1 1 0 000 2h6a1 1 0 000-2zm-4-6h2a1 1 0 000-2H9a1 1 0 000 2zm12 2h-3V3a1 1 0 00-.5-.87 1 1 0 00-1 0l-3 1.72-3-1.72a1 1 0 00-1 0l-3 1.72-3-1.72a1 1 0 00-1 0A1 1 0 002 3v16a3 3 0 003 3h14a3 3 0 003-3v-6a1 1 0 00-1-1zM5 20a1 1 0 01-1-1V4.73l2 1.14a1.08 1.08 0 001 0l3-1.72 3 1.72a1.08 1.08 0 001 0l2-1.14V19a3 3 0 00.18 1zm15-1a1 1 0 01-2 0v-5h2zm-7-7H7a1 1 0 000 2h6a1 1 0 000-2z" />
@@ -58,6 +102,7 @@ const Payment: React.FC = () => {
     },
     {
       title: "Pix",
+      type: "pix",
       icon: (
         <svg
           viewBox="0 0 512 512"
@@ -76,7 +121,7 @@ const Payment: React.FC = () => {
         </div>
       ),
     },
-  ]
+  ];
 
   return (
     <div className="flex flex-col gap-4 h-[600px] bg-gray-100 rounded-xl p-5 shadow-md">
@@ -85,9 +130,9 @@ const Payment: React.FC = () => {
           <div
             key={index}
             className={`flex flex-col items-center justify-center w-1/3 p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 ${
-              selectedPayment === index ? "bg-gray-100" : ""
+              paymentType === payment.type ? "bg-gray-100" : ""
             }`}
-            onClick={() => setSelectedPayment(index)}
+            onClick={() => setPaymentType(payment.type)}
           >
             {payment.icon}
             <span className="text-sm font-semibold">{payment.title}</span>
@@ -95,10 +140,18 @@ const Payment: React.FC = () => {
         ))}
       </div>
       <div className="flex flex-col items-center justify-center w-full p-4 border-2 border-gray-300 rounded-lg">
-        {payment_types[selectedPayment].form}
+        {
+          payment_types[
+            payment_types.findIndex((payment) => {
+              console.log(payment.type, paymentType)
+              return payment.type === paymentType
+            }) ||
+              0
+          ].form
+        }
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Payment
+export default Payment;

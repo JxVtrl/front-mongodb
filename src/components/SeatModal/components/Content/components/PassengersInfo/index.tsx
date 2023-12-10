@@ -28,20 +28,6 @@ const PassengersInfo: React.FC = () => {
     setPassengersInfo(newPassengersInfo);
   }, [seatsSelected, setPassengersInfo]);
 
-  React.useEffect(() => {
-    if (userPassenger) {
-      const newPassengersInfo = [...passengersInfo];
-      newPassengersInfo[0].passenger.name = user?.name || "Usuário";
-      newPassengersInfo[0].passenger.cpf = user?.cpf || "000.000.000-00";
-      setPassengersInfo(newPassengersInfo);
-    } else {
-      const newPassengersInfo = [...passengersInfo];
-      newPassengersInfo[0].passenger.name = "";
-      newPassengersInfo[0].passenger.cpf = "";
-      setPassengersInfo(newPassengersInfo);
-    }
-  }, [userPassenger, setPassengersInfo, passengersInfo, user?.name, user?.cpf]);
-
   return (
     <div className="flex flex-col gap-4 w-full overflow-y-auto h-[600px] bg-gray-100 rounded-xl p-5 shadow-md">
       {passengersInfo.length === 0 ? (
@@ -76,15 +62,24 @@ const PassengersInfo: React.FC = () => {
                   Passageiro {index + 1} - Assento {passengerInfo.seat.numero}
                 </span>
 
-                {/* toggle se é o proprio user ou não */}
-
-                <Switch
-                  checked={userPassenger}
-                  onChange={(checked) => {
-                    setUserPassenger(checked);
-                  }}
-                  label="É o usuário?"
-                />
+                {index === 0 && (
+                  <Switch
+                    checked={userPassenger}
+                    onChange={(checked) => {
+                      const newPassengersInfo = [...passengersInfo];
+                      setUserPassenger(checked);
+                      if (checked) {
+                        newPassengersInfo[0].passenger.name = user?.name || "";
+                        newPassengersInfo[0].passenger.cpf = user?.cpf || "";
+                      } else {
+                        newPassengersInfo[0].passenger.name = "";
+                        newPassengersInfo[0].passenger.cpf = "";
+                      }
+                      setPassengersInfo(newPassengersInfo);
+                    }}
+                    label="É o usuário?"
+                  />
+                )}
               </div>
               {passengersInfo.length === 1 || (
                 <CloseIcon
@@ -111,6 +106,7 @@ const PassengersInfo: React.FC = () => {
                   newPassengersInfo[index].passenger.name = e.target.value;
                   setPassengersInfo(newPassengersInfo);
                 }}
+                disabled={userPassenger && index === 0 && !!user?.name}
               />
               <input
                 type="text"

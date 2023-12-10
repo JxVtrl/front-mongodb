@@ -2,7 +2,6 @@
 import LocationIcon from "@/assets/icons/LocationIcon";
 import PersonIcon from "@/assets/icons/PersonIcon";
 import { useApp } from "@/contexts/contextApi";
-import { checkout } from "@/utils/backend_functions/checkout";
 import { format_hour } from "@/utils/functions";
 import React from "react";
 
@@ -21,6 +20,10 @@ const Summary: React.FC = () => {
 
     return isFilled;
   };
+
+  const checkIfPaymentIsFilled = () => {
+    return false;
+  }
 
   const handleCheckout = async () => {
     setLoading(true);

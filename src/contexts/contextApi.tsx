@@ -51,6 +51,10 @@ interface ContextProps {
   >
   checkoutStep: number
   setCheckoutStep: React.Dispatch<React.SetStateAction<number>>
+  paymentType: "credit_card" | "pix" | "boleto"
+  setPaymentType: React.Dispatch<
+    React.SetStateAction<"credit_card" | "pix" | "boleto">
+  >
 }
 
 const AppContext = createContext<ContextProps>({} as ContextProps)
@@ -61,7 +65,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedRoute, setSelectedRoute] = useState<Rota | null>(null)
   const [selectSeatModal, setSelectSeatModal] = useState(false)
   const [seatsSelected, setSeatsSelected] = useState<Assento[]>([])
-  const[checkoutStep, setCheckoutStep] = useState(0)
+  const [checkoutStep, setCheckoutStep] = useState(0)
+  const [paymentType, setPaymentType] = useState<"credit_card" | "pix" | "boleto">('credit_card')
   const [passengersInfo, setPassengersInfo] = useState<{
       passenger: {
         name: string
@@ -126,7 +131,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setSeatsSelected,
     passengersInfo,
     setPassengersInfo,
-    checkoutStep,setCheckoutStep
+    checkoutStep, setCheckoutStep,
+    paymentType, setPaymentType
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
