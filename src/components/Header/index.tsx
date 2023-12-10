@@ -1,18 +1,18 @@
-"use client"
-import React, { useState } from "react"
-import Link from "next/link"
-import { useApp } from "@/contexts/contextApi"
-import { HelpBox } from "@/components/HelpBox"
-import { usePathname, useRouter } from "next/navigation"
+"use client";
+import React, { useState } from "react";
+import Link from "next/link";
+import { useApp } from "@/contexts/contextApi";
+import { HelpBox } from "@/components/HelpBox";
+import { usePathname, useRouter } from "next/navigation";
 
 const Header: React.FC = () => {
-  const [showHelpBox, setShowHelpBox] = useState(false)
-  const { user, setUser } = useApp()
+  const [showHelpBox, setShowHelpBox] = useState(false);
+  const { user, setUser } = useApp();
 
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = usePathname();
+  const router = useRouter();
 
-  if (pathname === "/login" || pathname === "/register") return null
+  if (pathname === "/login" || pathname === "/register") return null;
 
   return (
     <section className="header-sec">
@@ -46,10 +46,10 @@ const Header: React.FC = () => {
             </Link>
             <button
               onMouseOver={() => {
-                setShowHelpBox(true)
+                setShowHelpBox(true);
               }}
               onMouseLeave={() => {
-                setShowHelpBox(false)
+                setShowHelpBox(false);
               }}
               className="header-button-ajuda"
             >
@@ -60,24 +60,34 @@ const Header: React.FC = () => {
         ) : (
           <div className="w-full flex items-center justify-end gap-5 p-4">
             <div className="color-black hidden md:flex">
-                Bem-vindo,{' '}<b>{user.name.split(" ")[0]}!</b>
+              <span>
+                Bem-vindo, <b>{user.name.split(" ")[0]}!</b>
+              </span>
             </div>
             {user.role === "admin" && (
               <button
                 className="w-fit bg-[#213a5c] hover:bg-[#213a5c]/90 rounded-md text-white font-bold py-2 px-4"
                 onClick={() => {
-                  router.push("/admin")
+                  router.push("/admin");
                 }}
               >
                 Painel de Admin
               </button>
             )}
             <button
+              className="w-fit bg-[#213a5c] hover:bg-[#213a5c]/90 rounded-md text-white font-bold py-2 px-4"
+              onClick={() => {
+                router.push("/tickets");
+              }}
+            >
+              Suas Passagens
+            </button>
+            <button
               className="header-button-login"
               onClick={() => {
-                setUser(null)
-                localStorage.removeItem("user")
-                localStorage.removeItem("userType")
+                setUser(null);
+                localStorage.removeItem("user");
+                localStorage.removeItem("userType");
               }}
             >
               Sair
@@ -86,7 +96,7 @@ const Header: React.FC = () => {
         )}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

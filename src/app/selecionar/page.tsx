@@ -26,7 +26,7 @@ const Page: React.FC = () => {
       setPassengersInfo([])
       setSeatsSelected([])
     }
-  }, [rotas, id, setSelectedRoute, router])
+  }, [rotas, id, setSelectedRoute, router,setPassengersInfo,setSeatsSelected])
 
   return <Selected />
 }

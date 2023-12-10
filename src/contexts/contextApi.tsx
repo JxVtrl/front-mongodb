@@ -14,6 +14,7 @@ type User = {
   password: string
   confirmPassword: string
   role: string
+  cpf?: string
 }
 
 interface ContextProps {
@@ -50,6 +51,14 @@ interface ContextProps {
   >
   checkoutStep: number
   setCheckoutStep: React.Dispatch<React.SetStateAction<number>>
+  paymentType: "credit_card" | "pix" | "boleto"
+  setPaymentType: React.Dispatch<
+    React.SetStateAction<"credit_card" | "pix" | "boleto">
+  >
+  modalAgradecimento: boolean
+  setModalAgradecimento: React.Dispatch<React.SetStateAction<boolean>>
+  compraRealizada: boolean
+  setCompraRealizada: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 const AppContext = createContext<ContextProps>({} as ContextProps)
@@ -60,7 +69,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedRoute, setSelectedRoute] = useState<Rota | null>(null)
   const [selectSeatModal, setSelectSeatModal] = useState(false)
   const [seatsSelected, setSeatsSelected] = useState<Assento[]>([])
-  const[checkoutStep, setCheckoutStep] = useState(0)
+  const [checkoutStep, setCheckoutStep] = useState(0)
+  const [paymentType, setPaymentType] = useState<"credit_card" | "pix" | "boleto">('pix')
   const [passengersInfo, setPassengersInfo] = useState<{
       passenger: {
         name: string
@@ -70,7 +80,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
         numero: number
       }
     }[]
-  >([])
+    >([])
+    const [modalAgradecimento, setModalAgradecimento] = useState(false);
+  const [compraRealizada, setCompraRealizada] = useState(false);
 
   const fetchRotas = async () => {
     const rotas_local = localStorage.getItem("rotas")
@@ -81,13 +93,6 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("rotas", JSON.stringify(used_routes))
 
     used_routes.sort(orderByYearThenByMonthThenByDayThenHour)
-
-    // used_routes = used_routes.filter((rota: Rota) => {
-    //   const now = new Date()
-    //   const rota_ida = rota.data_ida.split("/").reverse().join("/")
-    //   const rota_date = new Date(rota_ida)
-    //   return rota_date.getTime() > now.getTime()
-    // })
 
     setRotas(used_routes)
   }
@@ -125,7 +130,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setSeatsSelected,
     passengersInfo,
     setPassengersInfo,
-    checkoutStep,setCheckoutStep
+    checkoutStep, setCheckoutStep,
+    paymentType, setPaymentType,
+    modalAgradecimento, setModalAgradecimento,
+    compraRealizada, setCompraRealizada
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
