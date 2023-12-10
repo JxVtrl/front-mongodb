@@ -4,8 +4,11 @@ import Link from "next/link";
 import { useApp } from "@/contexts/contextApi";
 import { HelpBox } from "@/components/HelpBox";
 import { usePathname, useRouter } from "next/navigation";
+import imageDefault from '../../assets/profile-user.png'
 
 const Header: React.FC = () => {
+  const { userProfileImage } = useApp();
+
   const [showHelpBox, setShowHelpBox] = useState(false);
   const { user, setUser } = useApp();
 
@@ -63,6 +66,20 @@ const Header: React.FC = () => {
               <span>
                 Bem-vindo, <b>{user.name.split(" ")[0]}!</b>
               </span>
+              <Link href="/profile">
+                <img 
+                  src={userProfileImage || imageDefault.src} // Use a imagem do contexto ou a padrão
+                  alt="User default Profile" 
+                  style={{
+                    width: '20px',
+                    height: '20px',
+                    margin: 'auto',
+                    marginLeft: '5px',
+                    cursor: 'pointer',
+                    borderRadius: '50%',
+                  }}
+                />
+            </Link>
             </div>
             {user.role === "admin" && (
               <button
