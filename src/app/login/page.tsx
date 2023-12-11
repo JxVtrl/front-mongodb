@@ -21,7 +21,7 @@ const Page: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const { setUser } = useApp();
+  const { setUser,setRecognitionModal } = useApp();
   const [loading, setLoading] = React.useState(false);
   const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar a senha
 
@@ -114,7 +114,12 @@ const Page: React.FC = () => {
             {loading ? "Carregando..." : "Entrar"}
           </button>
         </form>
-
+          <button
+            className="login-form-button login-form-input"
+            onClick={()=>setRecognitionModal(true)}
+          >
+            Entrar com FaceID
+          </button>
         <span>
           Não tem cadastro? <Link href="/register">Cadastre-se</Link>
         </span>

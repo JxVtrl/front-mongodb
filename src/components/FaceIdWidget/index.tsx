@@ -4,9 +4,11 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as faceApi from "face-api.js";
 import { useApp } from "@/contexts/contextApi";
 import * as cloudinary from "cloudinary-core";
+import CloseIcon from "@/assets/icons/CloseIcon";
 
 export default function FaceIdWidget() {
-  const { recognitionModal } = useApp();
+  const { recognitionModal, setRecognitionModal } = useApp();
+  const [videoLoading, setVideoLoading] = useState(false);
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     alert("getUserMedia() não é suportado pelo seu navegador!");
   }
@@ -21,8 +23,8 @@ export default function FaceIdWidget() {
     null
   );
 
-  // Carregar modelos de detecção facial
   const loadModels = useCallback(async () => {
+    setVideoLoading(true);
     const MODEL_URL = "/models";
     await faceApi.loadSsdMobilenetv1Model(MODEL_URL);
     await faceApi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
@@ -31,7 +33,6 @@ export default function FaceIdWidget() {
     await faceApi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
   }, []);
 
-  // Inicializar a webcam
   const startVideo = useCallback(async () => {
     if (videoRef.current) {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -72,7 +73,7 @@ export default function FaceIdWidget() {
         });
         const response = cloudinaryCore.url(url, {
           resource_type: "image",
-        })
+        });
         console.log(response);
 
         const img = document.createElement("img");
@@ -106,27 +107,77 @@ export default function FaceIdWidget() {
   }, [faceMatcher]);
 
   useEffect(() => {
-    loadModels().then(() => {
-      createFaceMatcher();
-      startVideo();
-    });
+    setFaceMatcher(null);
+    loadModels()
+      .then(() => {
+        createFaceMatcher();
+        startVideo();
+      })
+      .finally(() => {
+        setVideoLoading(false);
+      });
   }, [loadModels, createFaceMatcher, startVideo]);
 
   if (!recognitionModal) return null;
 
   return (
-    <div className="flex justify-center items-center h-screen w-screen bg-[#00000050]">
-      <div className="bg-white shadow-lg rounded-lg flex justify-center h-[600px] w-[600px] p-6">
-        <div className="flex w-[300px] h-[300px] relative rounded-[50%]">
-          <video
-            id="video"
-            width="100%"
-            height="100%"
-            autoPlay
-            muted
-            ref={videoRef}
-          />
-          <canvas id="canvas" ref={canvasRef} className="absolute inset-0" />
+    <div className="fixed flex justify-center items-center h-screen w-screen bg-[#00000050] z-[999999]">
+      <div className="bg-white shadow-lg rounded-lg flex justify-center h-fit w-[600px] p-6 relative">
+        <CloseIcon
+          onClick={() => setRecognitionModal(false)}
+          className="absolute
+        top-0
+        right-0
+        m-4
+        cursor-pointer"
+        />
+
+        <div className="flex w-[300px] h-[300px] relative rounded-[50%] flex-column gap-5 items-center justify-center">
+          {videoLoading ? (
+            <div className="flex justify-center items-center h-full w-full">
+              <span className="text-black">Carregando...</span>
+            </div>
+          ) : (
+              <>
+                <div className="
+    relative
+    w-full
+    h-full
+    overflow-hidden
+">
+              <video
+                id="video"
+                width="100%"
+                height="100%"
+                autoPlay
+                muted
+                ref={videoRef}
+              />
+              <canvas
+                id="canvas"
+                ref={canvasRef}
+                className="absolute top-0 left-0 w-full h-full"
+                  />
+                  </div>
+              {faceMatcher ? (
+                  <span className="
+                  absolute
+                  bottom-0
+                  left-0
+                  w-full
+                  text-center
+                  
+                ">
+                  {faceMatcher.labeledDescriptors.map((label, index) => {
+                    const name = label.label;
+                    return <span key={index}>{name}</span>;
+                  })}
+                </span>
+              ) : (
+                <span>Usuário Desconhecido</span>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
