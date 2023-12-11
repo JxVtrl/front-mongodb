@@ -5,6 +5,7 @@ import BusSeats from "./components/BusSeats"
 import Legenda from "./components/Legenda"
 import { useApp } from "@/contexts/contextApi"
 import { useRouter } from "next/navigation"
+import '../../../../styles/busSeat.css'
 
 const Content: React.FC = () => {
   const [buttonDisabled, setButtonDisabled] = React.useState(true)
@@ -19,13 +20,13 @@ const Content: React.FC = () => {
 
   return (
     <div className="p-5 flex flex-col h-full overflow-y-auto bg-white rounded-b-xl gap-4">
-      <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-row justify-between items-center bus-seats-main-information">
         <RoutePath />
         <SeatsSelecteds />
       </div>
       <div className="w-full flex-col-reverse flex items-center gap-8">
         <BusSeats />
-        <div className="flex flex-row gap-4 w-[75%] justify-between items-center">
+        <div className="flex flex-row gap-4 w-[75%] justify-between items-center bus-seats-main-information-save">
           <Legenda />
           <button
             disabled={buttonDisabled}

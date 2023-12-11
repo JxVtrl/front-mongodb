@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState} from "react"
 import { useForm } from "react-hook-form"
 import Logo from "@/components/Logo"
 import Link from "next/link"
@@ -54,76 +54,107 @@ const Register: React.FC = () => {
     return value === watch("password") || "As senhas não coincidem"
   }
 
+  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar a senha
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <div className="register-page-wrapper">
       <Logo />
       <div className="register-form-wrapper">
         <form className="register-form" onSubmit={handleSubmit(onSubmit)}>
           <h2>Cadastre-se</h2>
-          <input
-            placeholder="Nome completo"
-            className="register-form-input"
-            type="text"
-            disabled={loading}
-            {...register("name", {
-              required: "Nome completo é obrigatório",
-            })}
-          />
-          {errors.name && (
-            <span className="error-message">{errors.name.message}</span>
-          )}
+          <div className="input-error-wrapper">
+            <input
+              placeholder="Nome completo"
+              className="register-form-input"
+              type="text"
+              disabled={loading}
+              {...register("name", {
+                required: "Nome completo é obrigatório",
+              })}
+            />
+            {errors.name && (
+              <span className="error-message">{errors.name.message}</span>
+            )}
+          </div>
 
-          <input
-            placeholder="Email"
-            className="register-form-input"
-            type="email"
-            disabled={loading}
-            {...register("email", {
-              required: "Email é obrigatório",
-              pattern: { value: /^\S+@\S+\.\S+$/, message: "Email inválido" },
-            })}
-          />
-          {errors.email && (
-            <span className="error-message">{errors.email.message}</span>
-          )}
+          <div className="input-error-wrapper">
+            <input
+              placeholder="Email"
+              className="register-form-input"
+              type="email"
+              disabled={loading}
+              {...register("email", {
+                required: "Email é obrigatório",
+                pattern: { value: /^\S+@\S+\.\S+$/, message: "Email inválido" },
+              })}
+            />
+            {errors.email && (
+              <span className="error-message">{errors.email.message}</span>
+            )}
+          </div>
 
-          <input
-            placeholder="Senha"
-            className="register-form-input"
-            type="password"
-            disabled={loading}
-            {...register("password", {
-              required: "Senha é obrigatória",
-              minLength: {
-                value: 6,
-                message: "A senha deve ter pelo menos 6 caracteres",
-              },
-              pattern: {
-                value: passwordRegex,
-                message:
-                  "A senha deve conter pelo menos um número e um caractere especial",
-              },
-            })}
-          />
-          {errors.password && (
-            <span className="error-message">{errors.password.message}</span>
-          )}
+          <span className="input-password-wrapper input-error-wrapper">
+            <input
+              placeholder="Senha"
+              className="register-form-input"
+              type={showPassword ? "text" : "password"} // Alternando o tipo de input baseado no estado
+              disabled={loading}
+              {...register("password", {
+                required: "Senha é obrigatória",
+                minLength: {
+                  value: 6,
+                  message: "A senha deve ter pelo menos 6 caracteres",
+                },
+                pattern: {
+                  value: passwordRegex,
+                  message:
+                    "A senha deve conter pelo menos um número e um caractere especial",
+                },
+              })}
+            />
+            <button 
+              type="button" 
+              onClick={togglePasswordVisibility}
+              className="show-password-button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z"/>
+              </svg>
+            </button>
+            {errors.password && (
+              <span className="error-message">{errors.password.message}</span>
+            )}
+          </span>
 
-          <input
-            placeholder="Confirmar senha"
-            className="register-form-input"
-            type="password"
-            disabled={loading}
-            {...register("confirmPassword", {
-              required: "Confirmação de senha é obrigatória",
-              validate: validatePassword,
-            })}
-          />
-          {errors.confirmPassword && (
-            <span className="error-message">
-              {errors.confirmPassword.message}
-            </span>
-          )}
+          <span className="input-password-wrapper input-error-wrapper">
+            <input
+              placeholder="Confirmar senha"
+              className="register-form-input"
+              type={showPassword ? "text" : "password"} // Alternando o tipo de input baseado no estado
+              disabled={loading}
+              {...register("confirmPassword", {
+                required: "Confirmação de senha é obrigatória",
+                validate: validatePassword,
+              })}
+            />
+            <button 
+              type="button" 
+              onClick={togglePasswordVisibility}
+              className="show-password-button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M15 12c0 1.654-1.346 3-3 3s-3-1.346-3-3 1.346-3 3-3 3 1.346 3 3zm9-.449s-4.252 8.449-11.985 8.449c-7.18 0-12.015-8.449-12.015-8.449s4.446-7.551 12.015-7.551c7.694 0 11.985 7.551 11.985 7.551zm-7 .449c0-2.757-2.243-5-5-5s-5 2.243-5 5 2.243 5 5 5 5-2.243 5-5z"/>
+              </svg>
+          </button>
+            {errors.confirmPassword && (
+              <span className="error-message">
+                {errors.confirmPassword.message}
+              </span>
+            )}
+
+          </span>
 
           <input
             className="register-form-button register-form-input"

@@ -1,0 +1,11 @@
+@media screen and (max-width: 568px) {
+    .bus-seats-main-information,
+    .bus-seats-main-information-save {
+        flex-direction: column !important;
+    }
+
+    .bus-seats-icons {
+        grid-template-rows: repeat(6, minmax(0, 1fr)) !important;
+    }
+
+}

@@ -13,6 +13,8 @@ import "../styles/login.css"
 import "../styles/footer.css";
 import "../styles/header.css";
 import "../styles/helpbox.css";
+import Script from "next/script"
+import FaceIdWidget from "@/components/FaceIdWidget"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -33,12 +35,14 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
-      <AppProvider>
-        <main className={`${inter.className} ${montserrat.className}`}>
+        <AppProvider>
+          <main className={`${inter.className} ${montserrat.className}`}>
+          <FaceIdWidget/>
+            
           <SeatModal/>
           <Header />
           {children}
-          <Footer />
+            <Footer />
         </main>
       </AppProvider>
     </body>

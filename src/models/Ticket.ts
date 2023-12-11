@@ -1,7 +1,7 @@
 import { Schema, models, model } from "mongoose"
 
 const ticketSchema = new Schema({
-  usuario: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,

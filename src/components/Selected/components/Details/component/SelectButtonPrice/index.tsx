@@ -17,7 +17,9 @@ const SelectButtonPrice: React.FC = () => {
         className="bg-blue-500 hover:bg-blue-600 text-white rounded-xl py-2 px-4 w-full text-center transition duration-200 ease-in-out"
         onClick={() => {
           if (localStorage.getItem("user")) setSelectSeatModal(true)
-          else router.push("/login")
+          else {
+            router.push(`/login?id=${selectedRoute?.id}`)
+          }
         }}
       >
         Selecionar assentos

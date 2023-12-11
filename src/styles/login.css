@@ -19,6 +19,7 @@
 }
 
 .login-form {
+    /* position: relative; */
     width: 100%;
     max-width: 400px;
     display: flex;
@@ -49,7 +50,7 @@
     width: 240px;
     border-radius: 50px;
     border: 1px solid #DBE3E5;
-    background: #213A5C;
+    background: #213A5C !important;
     color: #fff;
     font-family: 'Inter', sans-serif;
     font-size: 18px;
@@ -97,4 +98,20 @@
     .login-form > h2 {
         font-size: 16px;
     }
+}
+
+.show-password-button > svg > path {
+    fill: #fff;
+}
+
+.input-password-wrapper {
+    position: relative;
+}
+
+.show-password-button {
+    position: absolute; 
+    right: 10px; 
+    top: 50%; 
+    transform: translateY(-50%);
+    cursor: pointer; 
 }

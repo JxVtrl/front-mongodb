@@ -5,6 +5,7 @@ import Summary from "@/components/Summary"
 import { useApp } from "@/contexts/contextApi"
 import { useRouter } from "next/navigation"
 import React,{useEffect} from "react"
+import '../../styles/checkout.css'
 
 const Page: React.FC = () => {
   const { seatsSelected, checkoutStep,setCheckoutStep } = useApp()
@@ -13,8 +14,7 @@ const Page: React.FC = () => {
   
   useEffect(() => {
   setCheckoutStep(0)
-  
-  }, [])
+  }, [setCheckoutStep])
 
   if (!seatsSelected || seatsSelected.length === 0)
     return (
@@ -32,7 +32,7 @@ const Page: React.FC = () => {
     )
 
   return (
-    <div className="grid grid-cols-2 w-full bg-white rounded-xl p-5 gap-5 shadow-md">
+    <div className="grid grid-cols-2 w-full bg-white rounded-xl p-5 gap-5 shadow-md checkout-wrapper">
       {checkoutStep === 0 ? <PassengersInfo /> : <Payment />}
       <Summary />
     </div>

@@ -20,7 +20,7 @@ const TripList: React.FC = () => {
       <h2 className="text-center uppercase text-2xl font-bold text-gray-800 mb-4 ">
         Viagens disponíveis
       </h2>
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-4 px-4">
         {rotas.map((rota, index) => {
           return <TripItem rota={rota} key={index} />
         })}

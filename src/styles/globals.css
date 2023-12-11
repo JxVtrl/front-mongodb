@@ -48,8 +48,15 @@ input::placeholder {
   color: #fff !important;
 }
 
+.input-error-wrapper {
+  position: relative;
+}
+
 .error-message {
-  font-size: 12px;
+  position: absolute;
+  font-size: 10px;
   color: #ff0000;
   font-weight: bold;
+  left: 13px;
+  top: 45px;
 }

@@ -1,0 +1,6 @@
+@media screen and (max-width: 768px) {
+    .checkout-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+}

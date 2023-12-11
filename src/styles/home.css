@@ -49,6 +49,7 @@ input::placeholder {
   justify-content: center;
   position: relative;
   margin-top: -40px;
+  padding: 0px 15px;
 }
 
 /* MOBILE  */
