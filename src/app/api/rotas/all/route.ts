@@ -8,7 +8,7 @@ export async function GET() {
     const rotas = await Route.find()
 
     if (rotas.length === 0) {
-      return new Response(JSON.stringify([]), { status: 200 })
+      return new Response(JSON.stringify([]), { status: 204 })
     }
 
     return new Response(JSON.stringify(rotas), { status: 200 })
