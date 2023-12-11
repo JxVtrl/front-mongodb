@@ -11,10 +11,10 @@ export default function FaceIdWidget() {
   const [videoLoading, setVideoLoading] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(
-    document.getElementById("video") as HTMLVideoElement
+    null as unknown as HTMLVideoElement
   );
   const canvasRef = useRef<HTMLCanvasElement>(
-    document.getElementById("canvas") as HTMLCanvasElement
+    null as unknown as HTMLCanvasElement
   );
   const [faceMatcher, setFaceMatcher] = useState<faceApi.FaceMatcher | null>(
     null
@@ -135,36 +135,40 @@ export default function FaceIdWidget() {
               <span className="text-black">Carregando...</span>
             </div>
           ) : (
-              <>
-                <div className="
+            <>
+              <div
+                className="
     relative
     w-full
     h-full
     overflow-hidden
-">
-              <video
-                id="video"
-                width="100%"
-                height="100%"
-                autoPlay
-                muted
-                ref={videoRef}
-              />
-              <canvas
-                id="canvas"
-                ref={canvasRef}
-                className="absolute top-0 left-0 w-full h-full"
-                  />
-                  </div>
+"
+              >
+                <video
+                  id="video"
+                  width="100%"
+                  height="100%"
+                  autoPlay
+                  muted
+                  ref={videoRef}
+                />
+                <canvas
+                  id="canvas"
+                  ref={canvasRef}
+                  className="absolute top-0 left-0 w-full h-full"
+                />
+              </div>
               {faceMatcher ? (
-                  <span className="
+                <span
+                  className="
                   absolute
                   bottom-0
                   left-0
                   w-full
                   text-center
                   
-                ">
+                "
+                >
                   {faceMatcher.labeledDescriptors.map((label, index) => {
                     const name = label.label;
                     return <span key={index}>{name}</span>;
