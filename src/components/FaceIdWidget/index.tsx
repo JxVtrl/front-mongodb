@@ -9,9 +9,6 @@ import CloseIcon from "@/assets/icons/CloseIcon";
 export default function FaceIdWidget() {
   const { recognitionModal, setRecognitionModal } = useApp();
   const [videoLoading, setVideoLoading] = useState(false);
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-    alert("getUserMedia() não é suportado pelo seu navegador!");
-  }
 
   const videoRef = useRef<HTMLVideoElement>(
     document.getElementById("video") as HTMLVideoElement
