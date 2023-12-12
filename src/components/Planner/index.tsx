@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form"
 import Origem from "./component/Origem"
 import Data from "./component/Data"
 import Destino from "./component/Destino"
-import Passageiros from "./component/Passageiros"
 import Limpar from "./component/Limpar"
 import { useRouter } from "next/navigation"
 
@@ -37,6 +36,7 @@ const Planner: React.FC = () => {
   // Função para enviar os dados do formulário
   const onSubmit = (data: FormValues) => {
     const dataReverse = data.data.split("-").reverse().join("/")
+
     
     const rotaEncontrada = rotas.find(
       (rota) =>

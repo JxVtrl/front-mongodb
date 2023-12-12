@@ -1,13 +1,13 @@
 "use client";
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import {Cloudinary} from "@cloudinary/url-gen";
+import React, { useRef, useEffect, useCallback, useState } from "react";
 import * as faceApi from "face-api.js";
 import { useApp } from "@/contexts/contextApi";
 import Image from "next/image";
-import {Resize} from '@cloudinary/url-gen/actions/resize';
+
 const PhotoModal = () => {
-  const { photoModal, user,setPhotoModal } = useApp();
-  const [photoUrl, setPhotoUrl] = useState("");
+  const { photoModal, user, setPhotoModal, photoModalUrl, setPhotoModalUrl } =
+    useApp();
+  const [takePhotoUrl, setTakePhotoUrl] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement>(document.createElement("video"));
   const canvasRef = useRef<HTMLCanvasElement>(document.createElement("canvas"));
   const circleRef = useRef<HTMLDivElement>(document.createElement("div"));
@@ -54,38 +54,42 @@ const PhotoModal = () => {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const photoDataUrl = canvas.toDataURL("image/jpeg");
 
-        // Define a URL da foto capturada
-        setPhotoUrl(photoDataUrl);
+        setTakePhotoUrl(photoDataUrl);
       }
     }
   };
 
-    const uploadPhotoToCloudinary = async (photoDataUrl: any) => {
-        if(!user) return;
+  const uploadPhotoToCloudinary = async (photoDataUrl: any) => {
+    if (!user) return;
 
-        const response = await fetch('https://api.cloudinary.com/v1_1/dgha3j8nj/upload', {
-            method: 'POST',
-            body: JSON.stringify({
-                file: photoDataUrl,
-                upload_preset: 'ml_default',
-                folder: 'teste',
-                public_id: user.name
-            }),
-            headers: {
-                'Content-type': 'application/json'
-            }
-        })
+    try {
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dgha3j8nj/upload",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            file: photoDataUrl,
+            upload_preset: "ml_default",
+            folder: "teste",
+            public_id: user.name,
+            api_key: "893146136213397",
+          }),
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      );
 
-        const data = await response.json();
-        console.log(data);
-        
-
-
-
-        
-        
-        setPhotoUrl("");
-        setPhotoModal(false);
+      const data = await response.json();
+      console.log(data);
+      setPhotoModalUrl(data.secure_url);
+      console.log("A foto foi enviada com sucesso!");
+    } catch (error) {
+      console.error("Erro ao enviar a foto:", error);
+    } finally {
+      setTakePhotoUrl("");
+      setPhotoModal(false);
+    }
   };
 
   useEffect(() => {
@@ -151,16 +155,16 @@ const PhotoModal = () => {
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.5)]">
       <div className="absolute w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto bg-white  max-h-full p-5 flex flex-col justify-center items-center text-center gap-5">
         <h2>
-          {photoUrl
+          {takePhotoUrl
             ? "Foto Capturada:"
             : "Posicione o círculo na sua cabeça e centralize-a na câmera"}
         </h2>
 
         <div className="w-[300px] h-[225px] relative">
-          {photoUrl ? (
+          {takePhotoUrl ? (
             <div>
               <Image
-                src={photoUrl}
+                src={takePhotoUrl}
                 alt="Foto Capturada"
                 width={300}
                 height={225}
@@ -204,7 +208,7 @@ const PhotoModal = () => {
           )}
         </div>
 
-        {!photoUrl ? (
+        {!takePhotoUrl ? (
           <button
             className={`bg-blue-500 text-white rounded-md px-3 py-2 hover:bg-blue-600 transition duration-200 ease-in-out`}
             onClick={takePhoto}
@@ -212,17 +216,25 @@ const PhotoModal = () => {
             Capturar Foto
           </button>
         ) : (
-          <div>
+          <div
+            className="
+            flex
+            gap-2
+            items-center
+            justify-center
+            w-full
+          "
+          >
             <button
               className={`bg-blue-500 text-white rounded-md px-3 py-2 hover:bg-blue-600 transition duration-200 ease-in-out`}
-              onClick={() => setPhotoUrl("")}
+              onClick={() => setPhotoModalUrl("")}
             >
               Tirar outra foto
             </button>
             <button
               className={`bg-blue-500 text-white rounded-md px-3 py-2 hover:bg-blue-600 transition duration-200 ease-in-out`}
               onClick={() => {
-                uploadPhotoToCloudinary(photoUrl);
+                uploadPhotoToCloudinary(takePhotoUrl);
               }}
             >
               Enviar
