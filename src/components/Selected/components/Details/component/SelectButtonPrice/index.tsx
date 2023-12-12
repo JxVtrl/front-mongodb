@@ -18,7 +18,7 @@ const SelectButtonPrice: React.FC = () => {
         onClick={() => {
           if (localStorage.getItem("user")) setSelectSeatModal(true)
           else {
-            router.push(`/login?id=${selectedRoute?.id}`)
+            router.push(`/login?id=${selectedRoute?._id}`)
           }
         }}
       >
