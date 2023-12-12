@@ -87,6 +87,32 @@ const PhotoModal = () => {
       const data = await response.json();
       console.log(data);
       setPhotoModalUrl(data.secure_url);
+      
+      
+      // create new face
+      const newFace = {
+        name: user.name,
+        _id: user._id,
+        descriptors: [data.secure_url]
+      };
+      
+      // update user
+      const res = await fetch(
+        '/api/face/new',
+        {
+          method: "POST",
+          body: JSON.stringify({
+            ...newFace
+          }),
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      );
+      
+      const redData = await res.json();
+      console.log(redData)
+      
       console.log("A foto foi enviada com sucesso!");
     } catch (error) {
       console.error("Erro ao enviar a foto:", error);
