@@ -149,6 +149,59 @@ export function travelTime(departureTime: string, arrive_time: string) {
   return `${totalDiff.toFixed(0)}h ${diffMinutes.toFixed(0)}min`
 }
 
+export const validateCpf = (cpf: string) => {
+  let firstDigit = 0;
+  let secondDigit = 0;
+
+  //   Declarando um array vazio para os cpf's
+  let cpf_array = [];
+
+  //   Verificando se o cpf possui pontos e hífen, e caso tenha substituindo-os por nada
+  for (let i = 0; i < cpf.length; i++) {
+    if (cpf[i] == "." || cpf[i] == "-") {
+      cpf = cpf.replace(cpf[i], "");
+    }
+
+    // Cálculo do primeiro dígito
+    let sum = 0;
+    for (let i = 1; i <= 9; i++)
+      sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+
+    let rest = sum % 11;
+
+    if (rest < 2) {
+      firstDigit = 0;
+    } else {
+      firstDigit = 11 - rest;
+    }
+
+    sum = 0;
+
+    for (let i = 1; i <= 10; i++)
+      sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+
+    rest = sum % 11;
+
+    if (rest < 2) {
+      secondDigit = 0;
+    } else {
+      secondDigit = 11 - rest;
+    }
+  }
+
+  let cpf_verified = cpf.substring(0, 9) + firstDigit + secondDigit;
+
+  cpf_array.push(cpf);
+  cpf_array.push(cpf_verified);
+
+  if (cpf_array[0] !== cpf_array[1]) {
+    console.log("CPF inválido")
+    return false;
+  } 
+  console.log("CPF válido")
+  return true
+};
+
 export const getCoordsInGoogleMaps = async (cidade: string) => {
   try {
     const response = await fetch(

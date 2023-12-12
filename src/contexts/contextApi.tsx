@@ -68,6 +68,8 @@ interface ContextProps {
   setPhotoModal: React.Dispatch<React.SetStateAction<boolean>>;
   photoModalUrl: string;
   setPhotoModalUrl: React.Dispatch<React.SetStateAction<string>>;
+  validCpf: boolean;
+  setValidCpf: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<ContextProps>({} as ContextProps);
@@ -81,6 +83,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [checkoutStep, setCheckoutStep] = useState(0);
   const [photoModal, setPhotoModal] = useState(false);
   const [photoModalUrl, setPhotoModalUrl] = useState<string>("");
+  const [validCpf, setValidCpf] = useState(false);
+
   const [paymentType, setPaymentType] = useState<
     "credit_card" | "pix" | "boleto"
   >("pix");
@@ -160,6 +164,9 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setPhotoModal,
     photoModalUrl,
     setPhotoModalUrl,
+    validCpf,
+    setValidCpf
+    
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
