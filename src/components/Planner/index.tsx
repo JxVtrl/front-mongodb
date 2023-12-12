@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form"
 import Origem from "./component/Origem"
 import Data from "./component/Data"
 import Destino from "./component/Destino"
-import Passageiros from "./component/Passageiros"
 import Limpar from "./component/Limpar"
 import { useRouter } from "next/navigation"
 
@@ -37,11 +36,12 @@ const Planner: React.FC = () => {
   // Função para enviar os dados do formulário
   const onSubmit = (data: FormValues) => {
     const dataReverse = data.data.split("-").reverse().join("/")
+
     
     const rotaEncontrada = rotas.find(
       (rota) =>
-        rota.origem === data.origem &&
-        rota.destino === data.destino &&
+        rota.origin === data.origem &&
+        rota.destination === data.destino &&
         rota.departureDate === dataReverse
     )
     
@@ -50,7 +50,7 @@ const Planner: React.FC = () => {
       alert("Não foi possível encontrar uma rota com os dados informados")
       return
     } else {
-      router.push(`/selecionar?id=${rotaEncontrada.id}`)
+      router.push(`/selecionar?id=${rotaEncontrada._id}`)
     }
       
   }

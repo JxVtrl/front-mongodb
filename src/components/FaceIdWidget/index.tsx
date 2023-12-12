@@ -3,7 +3,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as faceApi from "face-api.js";
 import { useApp } from "@/contexts/contextApi";
 import * as cloudinary from "cloudinary-core";
+import { ResourceApiResponse as C } from "cloudinary";
 import CloseIcon from "@/assets/icons/CloseIcon";
+import { CloudinaryConfig } from "@cloudinary/url-gen/index";
 
 export default function FaceIdWidget() {
   const { recognitionModal, setRecognitionModal } = useApp();
@@ -14,6 +16,27 @@ export default function FaceIdWidget() {
   const [faceMatcher, setFaceMatcher] = useState<faceApi.FaceMatcher | null>(
     null
   );
+
+  const getFacesFromCloudinary = useCallback(async () => {
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/dppimfdxy/resources/image",
+      {
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            "893146136213397" + ":" + "vHvFad6vFvYL2fSzZXtl38ahSMQ"
+          ).toString("base64")}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const data = await response.json();
+    console.log(data);
+  }, []);
+
+  useEffect(() => {
+    getFacesFromCloudinary();
+  }, [getFacesFromCloudinary]);
 
   const loadModels = useCallback(async () => {
     console.log("Carregando modelos...");

@@ -207,9 +207,7 @@ const Register: React.FC = () => {
             flex-col
             justify-center
             items-center
-            gap-5
-
-            "
+            gap-5"
             >
               <h2>{photoModalUrl ? 'Obrigado pelo seu cadastro' : 'Configure seu FaceID'}</h2>
               <p>
