@@ -51,7 +51,7 @@ const Header: React.FC = () => {
           </div>
         ) : (
           <div className="w-full flex items-center justify-end gap-5 p-4">
-            <div className="color-black hidden md:flex">
+            <div className="color-black hidden sm:flex">
               <span>
                 Bem-vindo, <b>{user.name.split(" ")[0]}!</b>
               </span>
