@@ -16,25 +16,23 @@ export default function FaceIdWidget() {
     null
   );
   
+  // const getFacesFromCloudinary = useCallback(async () => {
+  //   // all files that start with "teste/"
+  //   const response = await axios.get(
+  //     "https://res.cloudinary.com/dppimfdxy/image/list/faces.json",
+  //     {
+  //       headers: {
+  //         'Authorization': `Bearer 893146136213397`,
+  //         'Access-Control-Allow-Origin': '*',
+  //       }
+  //     }
+  //   );
+  //   console.log('faces from cloudinary', response.data)
+  // }, []);
 
-
-  const getFacesFromCloudinary = useCallback(async () => {
-    // all files that start with "teste/"
-    const response = await axios.get(
-      "https://res.cloudinary.com/dppimfdxy/image/list/faces.json",
-      {
-        headers: {
-          'Authorization': `Bearer 893146136213397`,
-          'Access-Control-Allow-Origin': '*',
-        }
-      }
-    );
-    console.log('faces from cloudinary', response.data)
-  }, []);
-
-  useEffect(() => {
-    getFacesFromCloudinary();
-  }, []);
+  // useEffect(() => {
+  //   getFacesFromCloudinary();
+  // }, []);
 
   const loadModels = useCallback(async () => {
     console.log("Carregando modelos...");
@@ -49,15 +47,17 @@ export default function FaceIdWidget() {
 
       const facesList = [
         {
-          name: "João",
+          name: "JOAO VINICIUS CARVALHO LAMARCA VITRAL",
+          _id: '6563871e2a93897e36a29bf6',
           descriptors: [
-            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249589/teste/face_01/d6cotq9soibu0mo1xpeg.jpg",
+            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702349495/teste/Jo%C3%A3o.jpg",
           ],
         },
         {
-          name: "Marcelo",
+          name: "Marcelo Bracet",
+          _id: '65626ca2bbb1dfae43bfcbcc',
           descriptors: [
-            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702339022/teste/face_03/gcbfoqicmwj9ineavqid.jpg",
+            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702349495/teste/Marcelo.jpg",
           ],
         },
       ];
@@ -89,7 +89,27 @@ export default function FaceIdWidget() {
           labeledMockFaceDescriptorsResolved,
           0.6
         );
+
         setFaceMatcher(faceMatcher);
+
+        // response that have all users
+        const response = await axios.get('/api/auth/all_users')
+        console.log(response.data)
+
+        // facematcher will get the label, get each of items in faceList and get the _id
+        const faceMatcherWithId = faceMatcher.labeledDescriptors.map((item) => {
+          const user = response.data.find((user:any) => user.name === item.label)
+          return {
+            _id: user._id,
+            label: item.label,
+            descriptors: item.descriptors
+          }
+        })
+
+        console.log('faceMatcherWithId', faceMatcherWithId)
+
+
+
       }
     } catch (error) {
       console.error("Erro ao carregar modelos:", error);
