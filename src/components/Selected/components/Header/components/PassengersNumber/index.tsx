@@ -29,7 +29,7 @@ const PassengersNumber: React.FC = () => {
     <div className="flex items-center gap-[4px]">
       <PersonIcon />
       <span className="text-[#A0A0A0] text-sm">
-        {calculateNumberOfSeatsRemaining()} seats disponíveis
+        {calculateNumberOfSeatsRemaining()} Assentos disponíveis
       </span>
     </div>
   )

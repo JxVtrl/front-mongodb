@@ -70,23 +70,23 @@ const Summary: React.FC = () => {
       const status = response.status;
 
       setCompraRealizada(status === 200);
+      if (status !== 200) throw new Error('Erro ao realizar compra')
       
-      await axios.post("/api/send-email", {
-        email: user?.email,
-      }, {
-        headers: {
-          "Content-Type": "application/json",
+      // await axios.post("/api/send-email", {
+      //   email: user?.email,
+      // }, {
+      //   headers: {
+      //     "Content-Type": "application/json",
 
-        },
-        method: "POST"
+      //   },
+      //   method: "POST"
 
-      }).then(() => {
-        alert("Email enviado com sucesso!")
-      }).catch(() => {
-        alert("Erro ao enviar email")
-      })
+      // }).then(() => {
+      //   alert("Email enviado com sucesso!")
+      // }).catch(() => {
+      //   alert("Erro ao enviar email")
+      // })
 
-      if (status !== 200) throw new Error("Erro ao realizar compra");
 
       setTimeout(() => {
         router.push("/");
