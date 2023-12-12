@@ -277,6 +277,8 @@ export default function FaceIdWidget() {
               height="225px"
               autoPlay
               muted
+              playsInline
+              webkit-playsinline="true"
               ref={videoRef}
             />
             <canvas
