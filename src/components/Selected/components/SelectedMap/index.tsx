@@ -7,7 +7,7 @@ type SelectedMapProps = {
 }
 
 const SelectedMap: React.FC<SelectedMapProps> = ({ route }) => {
-  const mapRef = React.useRef<HTMLDivElement>(document.createElement("div"))
+  const mapRef = React.useRef<HTMLDivElement>(null)
 
   console.log(route)
   
@@ -25,6 +25,8 @@ const SelectedMap: React.FC<SelectedMapProps> = ({ route }) => {
 
     const directionsService = new google.maps.DirectionsService()
     const directionsRenderer = new google.maps.DirectionsRenderer()
+
+    if(!mapRef.current) return console.log('mapRef.current is null')
 
     const map = new Map(mapRef.current, {
       center: origin,

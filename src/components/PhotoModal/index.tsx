@@ -8,9 +8,13 @@ const PhotoModal = () => {
   const { photoModal, user, setPhotoModal, photoModalUrl, setPhotoModalUrl } =
     useApp();
   const [takePhotoUrl, setTakePhotoUrl] = useState<string>("");
-  const videoRef = useRef<HTMLVideoElement>(document.createElement("video"));
-  const canvasRef = useRef<HTMLCanvasElement>(document.createElement("canvas"));
-  const circleRef = useRef<HTMLDivElement>(document.createElement("div"));
+  const videoRef = useRef<HTMLVideoElement>(
+    null
+  );
+  const canvasRef = useRef<HTMLCanvasElement>(
+    null
+  );
+  const circleRef = useRef<HTMLDivElement>(null);
   const isFaceCenteredRef = useRef<boolean>(false);
 
   const loadModels = useCallback(async () => {
@@ -98,7 +102,7 @@ const PhotoModal = () => {
       video.addEventListener("play", async () => {
         const canvas = canvasRef.current;
         const displaySize = { width: 300, height: 225 };
-        faceApi.matchDimensions(canvas, displaySize);
+        faceApi.matchDimensions(canvas!, displaySize);
 
         const updateFaceRecognition = async () => {
           canvas
@@ -109,15 +113,15 @@ const PhotoModal = () => {
           const context = canvas?.getContext("2d");
 
           if (context) {
-            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.clearRect(0, 0, canvas!.width, canvas!.height);
 
             const circleCenterX =
-              circle?.getBoundingClientRect().left +
-              circle?.getBoundingClientRect().width / 2;
+              circle!?.getBoundingClientRect().left +
+              circle!?.getBoundingClientRect().width / 2;
             const circleCenterY =
-              circle?.getBoundingClientRect().top +
-              circle?.getBoundingClientRect().height / 2;
-            const circleRadius = circle?.getBoundingClientRect().width / 2;
+              circle!?.getBoundingClientRect().top +
+              circle!?.getBoundingClientRect().height / 2;
+            const circleRadius = circle!?.getBoundingClientRect().width / 2;
 
             context.beginPath();
             context.arc(
