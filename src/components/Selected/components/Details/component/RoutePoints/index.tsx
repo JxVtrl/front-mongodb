@@ -11,14 +11,14 @@ const RoutePoints: React.FC = (props) => {
           <LocationIcon />
           <span>Origem</span>
         </div>
-        <span className="ml-[32px] font-bold text-2xl">{selectedRoute?.origem}</span>
+        <span className="ml-[32px] font-bold text-2xl">{selectedRoute?.origin}</span>
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <LocationIcon />
           <span>Destino</span>
         </div>
-        <span className="ml-[32px] font-bold text-2xl">{selectedRoute?.destino}</span>
+        <span className="ml-[32px] font-bold text-2xl">{selectedRoute?.destination}</span>
       </div>
     </div>
   )

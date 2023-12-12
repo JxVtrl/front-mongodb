@@ -3,9 +3,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as faceApi from "face-api.js";
 import { useApp } from "@/contexts/contextApi";
 import * as cloudinary from "cloudinary-core";
-import { ResourceApiResponse as C } from "cloudinary";
 import CloseIcon from "@/assets/icons/CloseIcon";
-import { CloudinaryConfig } from "@cloudinary/url-gen/index";
+import axios from "axios";
 
 export default function FaceIdWidget() {
   const { recognitionModal, setRecognitionModal } = useApp();
@@ -16,27 +15,26 @@ export default function FaceIdWidget() {
   const [faceMatcher, setFaceMatcher] = useState<faceApi.FaceMatcher | null>(
     null
   );
+  
+
 
   const getFacesFromCloudinary = useCallback(async () => {
-    const response = await fetch(
-      "https://api.cloudinary.com/v1_1/dppimfdxy/resources/image",
+    // all files that start with "teste/"
+    const response = await axios.get(
+      "https://res.cloudinary.com/dppimfdxy/image/list/faces.json",
       {
         headers: {
-          Authorization: `Basic ${Buffer.from(
-            "893146136213397" + ":" + "vHvFad6vFvYL2fSzZXtl38ahSMQ"
-          ).toString("base64")}`,
-          'Content-Type': 'application/json',
-        },
+          'Authorization': `Bearer 893146136213397`,
+          'Access-Control-Allow-Origin': '*',
+        }
       }
     );
-
-    const data = await response.json();
-    console.log(data);
+    console.log('faces from cloudinary', response.data)
   }, []);
 
   useEffect(() => {
     getFacesFromCloudinary();
-  }, [getFacesFromCloudinary]);
+  }, []);
 
   const loadModels = useCallback(async () => {
     console.log("Carregando modelos...");
@@ -54,16 +52,12 @@ export default function FaceIdWidget() {
           name: "João",
           descriptors: [
             "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249589/teste/face_01/d6cotq9soibu0mo1xpeg.jpg",
-            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249590/teste/face_01/ciyzoasqglmcrx7vvdkx.jpg",
-            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249589/teste/face_01/igfguokymw8gu2h9kjxu.jpg",
-            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702339010/teste/face_02/javjullo1u5ap3bkbhtl.jpg",
           ],
         },
         {
           name: "Marcelo",
           descriptors: [
             "https://res.cloudinary.com/dppimfdxy/image/upload/v1702339022/teste/face_03/gcbfoqicmwj9ineavqid.jpg",
-            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702339021/teste/face_03/mvjixwmkzygsi2lvb33u.jpg",
           ],
         },
       ];
