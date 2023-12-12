@@ -5,9 +5,10 @@ import { useApp } from "@/contexts/contextApi";
 import * as cloudinary from "cloudinary-core";
 import CloseIcon from "@/assets/icons/CloseIcon";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function FaceIdWidget() {
-  const { recognitionModal, setRecognitionModal } = useApp();
+  const { recognitionModal, setRecognitionModal,setUser } = useApp();
   const [videoLoading, setVideoLoading] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(
@@ -19,6 +20,8 @@ export default function FaceIdWidget() {
   const [faceMatcher, setFaceMatcher] = useState<faceApi.FaceMatcher | null>(
     null
   );
+  
+  const router = useRouter()
   
   // const getFacesFromCloudinary = useCallback(async () => {
   //   // all files that start with "teste/"
@@ -95,23 +98,6 @@ export default function FaceIdWidget() {
         );
 
         setFaceMatcher(faceMatcher);
-
-        // response that have all users
-        const response = await axios.get('/api/auth/all_users')
-        console.log(response.data)
-
-        // facematcher will get the label, get each of items in faceList and get the _id
-        const faceMatcherWithId = faceMatcher.labeledDescriptors.map((item) => {
-          const user = response.data.find((user:any) => user.name === item.label)
-          return {
-            _id: user._id,
-            label: item.label,
-            descriptors: item.descriptors
-          }
-        })
-
-        console.log('faceMatcherWithId', faceMatcherWithId)
-
 
 
       }
@@ -249,6 +235,23 @@ export default function FaceIdWidget() {
               [text],
               resizedDetections[0].detection.box.bottomLeft
             ).draw(canvas!);
+            
+            
+            const response = await axios.get('/api/auth/all_users')
+            console.log(response.data)
+            
+            // get user detected
+            const user = response.data.find((user: any) => user.name === text)
+            
+            if(user){
+              setUser(user)
+              // adicionar ao localstorage
+              localStorage.setItem('user', JSON.stringify(user))
+              setRecognitionModal(false)
+              router.push('/')
+            }
+            
+            
           }
 
           requestAnimationFrame(updateFaceRecognition);

@@ -1,21 +1,21 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import { useApp } from "@/contexts/contextApi";
-import { HelpBox } from "@/components/HelpBox";
-import { usePathname, useRouter } from "next/navigation";
-import imageDefault from '../../assets/profile-user.png'
+"use client"
+import React, { useState } from "react"
+import Link from "next/link"
+import { useApp } from "@/contexts/contextApi"
+import { HelpBox } from "@/components/HelpBox"
+import { usePathname, useRouter } from "next/navigation"
+import imageDefault from "../../assets/profile-user.png"
 
 const Header: React.FC = () => {
-  const { userProfileImage } = useApp();
+  const { userProfileImage } = useApp()
 
-  const [showHelpBox, setShowHelpBox] = useState(false);
-  const { user, setUser } = useApp();
+  const [showHelpBox, setShowHelpBox] = useState(false)
+  const { user, setUser } = useApp()
 
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname()
+  const router = useRouter()
 
-  if (pathname === "/login" || pathname === "/register") return null;
+  if (pathname === "/login" || pathname === "/register") return null
 
   return (
     <section>
@@ -46,7 +46,8 @@ const Header: React.FC = () => {
           <div className="">
             <Link href="/login">
               <button className="bg-[#213a5c] px-2 py-1 text-white rounded-lg transition-all hover:bg-[#213a5c]/90 duration-200">
-              <p className="text-md">Entrar</p></button>
+                <p className="text-md">Entrar</p>
+              </button>
             </Link>
           </div>
         ) : (
@@ -56,25 +57,25 @@ const Header: React.FC = () => {
                 Bem-vindo, <b>{user.name.split(" ")[0]}!</b>
               </span>
               <Link href="/profile">
-                <img 
+                <img
                   src={userProfileImage || imageDefault.src} // Use a imagem do contexto ou a padrão
-                  alt="User default Profile" 
+                  alt="User default Profile"
                   style={{
-                    width: '20px',
-                    height: '20px',
-                    margin: 'auto',
-                    marginLeft: '5px',
-                    cursor: 'pointer',
-                    borderRadius: '50%',
+                    width: "20px",
+                    height: "20px",
+                    margin: "auto",
+                    marginLeft: "5px",
+                    cursor: "pointer",
+                    borderRadius: "50%",
                   }}
                 />
-            </Link>
+              </Link>
             </div>
             {user.role === "admin" && (
               <button
                 className="hidden md:block w-fit bg-[#213a5c] hover:bg-[#213a5c]/90 rounded-md text-white font-bold py-2 px-4"
                 onClick={() => {
-                  router.push("/admin");
+                  router.push("/admin")
                 }}
               >
                 Painel de Admin
@@ -83,7 +84,7 @@ const Header: React.FC = () => {
             <button
               className="hidden md:block w-fit bg-[#213a5c] hover:bg-[#213a5c]/90 rounded-md text-white font-bold py-2 px-4"
               onClick={() => {
-                router.push("/tickets");
+                router.push("/tickets")
               }}
             >
               Suas Passagens
@@ -91,9 +92,9 @@ const Header: React.FC = () => {
             <button
               className="header-button-login"
               onClick={() => {
-                setUser(null);
-                localStorage.removeItem("user");
-                localStorage.removeItem("userType");
+                setUser(null)
+                localStorage.removeItem("user")
+                localStorage.removeItem("userType")
               }}
             >
               Sair
@@ -102,7 +103,7 @@ const Header: React.FC = () => {
         )}
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header
