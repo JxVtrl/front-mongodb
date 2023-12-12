@@ -25,8 +25,6 @@ export default function Admin () {
   const handleCreateRoute = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log(getCoordsInGoogleMaps(formData.destination))
-    
     const destination_coords = await getCoordsInGoogleMaps(formData.destination)
     const origin_coords = await getCoordsInGoogleMaps(formData.origin)
     
@@ -38,8 +36,8 @@ export default function Admin () {
         ...formData,
         departureTime: formData.departureTime + ":00",
         departureDate: new Date(formData.departureDate).toISOString(),
-        destination_coords: destination_coords,
-        origin_coords: origin_coords,
+        destination_coords,
+        origin_coords
       }, {
         headers: {
           "Content-Type": "application/json"

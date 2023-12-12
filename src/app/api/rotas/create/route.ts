@@ -1,22 +1,31 @@
 import Route from "@/models/Route"
 import connectMongoDB from "@/assets/lib/database"
-import { getCoordsInGoogleMaps } from "@/utils/functions"
 
 export async function POST(req: Request, res: Response) {
-
   try {
-    
-  const { origin,origin_coords, destination, destination_coords,departureTime, departureDate, value } = await req.json()
+    const {
+      origin,
+      origin_coords,
+      destination,
+      destination_coords,
+      departureTime,
+      departureDate,
+      value,
+    } = await req.json()
 
-    
     await connectMongoDB()
-    
-    const alreadyExists = await Route.findOne({ origin, destination, departureTime, departureDate })
-    
+
+    const alreadyExists = await Route.findOne({
+      origin,
+      destination,
+      departureTime,
+      departureDate,
+    })
+
     if (alreadyExists) {
       return new Response("Rota já cadastrada", { status: 409 })
     }
-    
+
     let seats = []
     for (let i = 0; i < 40; i++) {
       seats.push({
@@ -24,19 +33,18 @@ export async function POST(req: Request, res: Response) {
         numero: i + 1,
         ocupado: false,
       })
-    }    
+    }
 
     const route = await Route.create({
       origin,
-      origin_coords: getCoordsInGoogleMaps(origin),
+      origin_coords,
       destination,
-      destination_coords: getCoordsInGoogleMaps(destination),
+      destination_coords,
       departureTime,
       departureDate,
       value,
-      seats
+      seats,
     })
-
 
     if (!route) {
       return new Response("Rota não encontrada", { status: 204 })
