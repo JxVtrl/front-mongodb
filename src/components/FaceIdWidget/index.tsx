@@ -52,24 +52,19 @@ export default function FaceIdWidget() {
       await faceApi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
       console.log("Modelos carregados com sucesso.");
 
-      const facesList = [
+      const resFacesList = await fetch('/api/face/all',
         {
-          name: "JOAO VINICIUS CARVALHO LAMARCA VITRAL",
-          _id: '6563871e2a93897e36a29bf6',
-          descriptors: [
-            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702349495/teste/Jo%C3%A3o.jpg",
-          ],
-        },
-        {
-          name: "Marcelo Bracet",
-          _id: '65626ca2bbb1dfae43bfcbcc',
-          descriptors: [
-            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702349495/teste/Marcelo.jpg",
-          ],
-        },
-      ];
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      
+      const resList = await resFacesList.json()
+      
       const augmentedMockFacesList =
-        (await facesListInDifferentAngles(facesList)) || [];
+        (await facesListInDifferentAngles(resList)) || [];
 
       console.log("Lista de faces mockadas:", augmentedMockFacesList);
 
@@ -251,7 +246,8 @@ export default function FaceIdWidget() {
               router.push('/')
             }
             
-            
+            // desligar a camera
+            video.pause()
           }
 
           requestAnimationFrame(updateFaceRecognition);
