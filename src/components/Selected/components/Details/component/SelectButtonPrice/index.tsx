@@ -9,7 +9,7 @@ const SelectButtonPrice: React.FC = () => {
     <div className="flex items-center justify-between w-full">
       <div className="flex flex-col w-full">
         <span className="text-2xl font-bold ">
-          R$ {selectedRoute?.value},00
+          R$ {selectedRoute?.value || 20},00
         </span>
         <span className="text-sm text-gray-500">value por passageiro</span>
       </div>
