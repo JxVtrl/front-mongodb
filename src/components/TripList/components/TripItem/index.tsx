@@ -15,7 +15,7 @@ const TripItem: React.FC<TripItemProps> = ({ rota }) => {
     <Link
       href={{
         pathname: `/selecionar`,
-        query: { id: rota._id },
+        query: { rota_id: rota._id },
       }}
       key={rota._id}
       className="w-full max-w-[800px] bg-white shadow-md my mx-auto rounded-md cursor-pointer hover:shadow-lg transition duration-200 ease-in-out p-5 gap-3 flex flex-col"
@@ -36,12 +36,9 @@ const TripItem: React.FC<TripItemProps> = ({ rota }) => {
             new Date(rota.departureDate).toLocaleDateString("pt-BR", {
               timeZone: "UTC",
             })
-            
-      
-            
           }</p>
         </div>
-        {/* <p className="text-xl font-bold text-green-500">R$ {rota.valor}</p> */}
+        <p className="text-xl font-bold text-green-500">{rota.value}</p>
       </div>
       <SelectedMap route={rota} />
     </Link>

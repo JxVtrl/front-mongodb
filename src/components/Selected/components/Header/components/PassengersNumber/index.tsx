@@ -7,11 +7,13 @@ const PassengersNumber: React.FC = () => {
   
   const calculateNumberOfSeatsRemaining = () => {
     if (selectedRoute) {
-      const assentos = selectedRoute.assentos
+      const seats = selectedRoute.seats
       let availableSeats = 0
       
-      for (let i = 0; i < assentos.length; i++) {
-        if (assentos[i].ocupado === false) {
+      if(!seats) return 0
+      
+      for (let i = 0; i < seats.length; i++) {
+        if (seats[i].ocupado === false) {
           availableSeats++
         }
       }
@@ -27,7 +29,7 @@ const PassengersNumber: React.FC = () => {
     <div className="flex items-center gap-[4px]">
       <PersonIcon />
       <span className="text-[#A0A0A0] text-sm">
-        {calculateNumberOfSeatsRemaining()} assentos disponíveis
+        {calculateNumberOfSeatsRemaining()} seats disponíveis
       </span>
     </div>
   )

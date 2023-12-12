@@ -5,7 +5,7 @@ const SeatsSelecteds: React.FC = () => {
   const { seatsSelected } = useApp()
   return (
     <div>
-      <span>Assentos selecionados: {seatsSelected.length}</span>
+      <span>seats selecionados: {seatsSelected.length}</span>
     </div>
   )
 }

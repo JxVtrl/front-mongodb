@@ -4,6 +4,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/contexts/contextApi";
+import { getCoordsInGoogleMaps } from "@/utils/functions";
 
 export default function Admin () {
   const [selectedButton, setSelectedButton] = useState<string>("");
@@ -12,7 +13,9 @@ export default function Admin () {
 
   const [formData, setFormData] = useState({
     origin: "",
+    origin_coords:"",
     destination: "",
+    destination_coords: "",
     departureTime: "",
     departureDate: "",
   });
@@ -21,6 +24,13 @@ export default function Admin () {
 
   const handleCreateRoute = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    console.log(getCoordsInGoogleMaps(formData.destination))
+    
+    const destination_coords = await getCoordsInGoogleMaps(formData.destination)
+    const origin_coords = await getCoordsInGoogleMaps(formData.origin)
+    
+    console.log(destination_coords,origin_coords)
 
     try {
       
@@ -28,6 +38,8 @@ export default function Admin () {
         ...formData,
         departureTime: formData.departureTime + ":00",
         departureDate: new Date(formData.departureDate).toISOString(),
+        destination_coords: destination_coords,
+        origin_coords: origin_coords,
       }, {
         headers: {
           "Content-Type": "application/json"
@@ -35,6 +47,7 @@ export default function Admin () {
       });
 
       if (response.status == 201) {
+        console.log(response.data)
         setRotas([...rotas,response.data])
         alert("Rota cadastrada com sucesso")
         setFormData({
@@ -42,6 +55,8 @@ export default function Admin () {
           destination: "",
           departureTime: "",
           departureDate: "",
+          destination_coords: "",
+          origin_coords: "",
         });
       }
       
@@ -63,7 +78,7 @@ export default function Admin () {
     }));
   };
 
-  const handleDeleteRoute = async (e: React.FormEvent, id: number) => {
+  const handleDeleteRoute = async (e: React.FormEvent, id: number | string) => {
     e.preventDefault();
 
     try {

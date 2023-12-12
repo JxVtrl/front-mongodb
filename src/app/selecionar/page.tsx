@@ -2,21 +2,21 @@
 
 import Selected from "@/components/Selected"
 import { useApp } from "@/contexts/contextApi"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import React from "react"
 
 const Page: React.FC = () => {
-  const { rotas, setSelectedRoute,setPassengersInfo,setSeatsSelected } = useApp()
-
+  const { rotas, setSelectedRoute, setPassengersInfo, setSeatsSelected } =
+    useApp()
   const searchParams = useSearchParams()
-  const id = searchParams.get("id")
+  const id = searchParams.get("rota_id")
 
   const router = useRouter()
 
   React.useEffect(() => {
     if (!id) return
 
-    const route = rotas.find((rota) => rota._id === Number(id))
+    const route = rotas.find((rota) => rota._id == id)
 
     if (!route) {
       router.push("/")
@@ -26,7 +26,7 @@ const Page: React.FC = () => {
       setPassengersInfo([])
       setSeatsSelected([])
     }
-  }, [rotas, id, setSelectedRoute, router,setPassengersInfo,setSeatsSelected])
+  }, [rotas, id, setSelectedRoute, router, setPassengersInfo, setSeatsSelected])
 
   return <Selected />
 }
