@@ -22,8 +22,8 @@ const Destino: React.FC<Props> = ({ setValue, value, errors, register }) => {
         onChange={(e) => setValue({ ...value, destino: e.target.value })}
       >
         <option value="">Destino</option>
-        {rotas.map((rota) => {
-          return <option value={rota.destination}>{rota.destination}</option>
+        {rotas.map((rota,index) => {
+          return <option key={index} value={rota.destination}>{rota.destination}</option>
         })}
       </select>
       {errors.destino && (

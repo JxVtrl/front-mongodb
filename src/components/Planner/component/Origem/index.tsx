@@ -20,8 +20,8 @@ const Origem: React.FC<Props> = ({ setValue, value, errors, register }) => {
         onChange={(e) => setValue({ ...value, origem: e.target.value })}
       >
         <option value="">Origem</option>
-        {rotas.map((rota) => {
-          return <option value={rota.origin}>{rota.origin}</option>
+        {rotas.map((rota,index) => {
+          return <option key={index} value={rota.origin}>{rota.origin}</option>
         })}
       </select>
       {errors.origem && (
