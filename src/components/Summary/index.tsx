@@ -139,7 +139,7 @@ const Summary: React.FC = () => {
                 <span className="text-md">Destino</span>
               </div>
               <span className="text-lg font-bold ml-8">
-                {selectedRoute?.origin}
+                {selectedRoute?.destination}
               </span>
             </div>
             <div className="flex flex-col items-end">
