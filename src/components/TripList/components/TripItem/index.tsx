@@ -24,14 +24,22 @@ const TripItem: React.FC<TripItemProps> = ({ rota }) => {
         <div>
           <div className="flex items-center justify-center text-center gap-2">
             <h3>
-              <b>{rota.origin}</b> - {format_hour(rota.departureTime)}
+              <b>{rota.origin}</b> - {rota.departureTime}
             </h3>
             <ArrowRight />
             <h3>
-              <b>{rota.destination}</b> - {format_hour(rota.departureTime)}
+              <b>{rota.destination}</b> - {Number(rota.departureTime.split(":")[0] )+ 3 + ":" + rota.departureTime.split(":")[1]}
             </h3>
           </div>
-          <p>{format_date(rota.departureDate)}</p>
+          <p>{
+            // converter rota.departureDate para o formato americano
+            new Date(rota.departureDate).toLocaleDateString("pt-BR", {
+              timeZone: "UTC",
+            })
+            
+      
+            
+          }</p>
         </div>
         {/* <p className="text-xl font-bold text-green-500">R$ {rota.valor}</p> */}
       </div>

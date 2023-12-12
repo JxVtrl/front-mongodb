@@ -25,8 +25,7 @@ export const random_date = (start: Date, end: Date) => {
 }
 
 export const format_date = (date: string) => {
-    console.log('date',date)
-  if(!date) return ""
+  if (!date) return ""
   
   const dateSplit = date.split("/")
 

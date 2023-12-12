@@ -11,8 +11,8 @@ const routeSchema = new Schema({
     type: String,
   },
   departureDate: {
-    type: Date,
-    default: Date.now,
+    type: String,
+    // default: Date.now,
   },
 })
 

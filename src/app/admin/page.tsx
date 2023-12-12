@@ -18,17 +18,16 @@ export default function Admin () {
   });
   
   const router = useRouter()
-  console.log(rotas)
 
   const handleCreateRoute = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-    console.log(formData)
       
       const response = await axios.post("/api/rotas/create", {
         ...formData,
         departureTime: formData.departureTime + ":00",
+        departureDate: new Date(formData.departureDate).toISOString(),
       }, {
         headers: {
           "Content-Type": "application/json"
@@ -36,7 +35,14 @@ export default function Admin () {
       });
 
       if (response.status == 201) {
-      alert("Rota cadastrada com sucesso")
+        setRotas([...rotas,response.data])
+        alert("Rota cadastrada com sucesso")
+        setFormData({
+          origin: "",
+          destination: "",
+          departureTime: "",
+          departureDate: "",
+        });
       }
       
       if (response.status == 409) {
@@ -66,7 +72,7 @@ export default function Admin () {
         .then(() => {
           alert("Rota deletada com sucesso");
           router.push("/admin")
-        }).finally(() => {
+        }).then(() => {
           const newRotas = rotas.filter((rota) => rota._id !== id);
           setRotas( newRotas);
         });
@@ -169,10 +175,11 @@ export default function Admin () {
           </form>
         </div>
       )}
+      {selectedButton==="Apagar rota existente" && rotas.length === 0 && <p className="w-full text-center">Não há rotas cadastradas, adicione uma nota rota</p>}
       {selectedButton === "Apagar rota existente" && (
         <>
           {rotas && rotas.map((route) => (
-            <div key={route._id} className="flex justify-between w-full bg-blue-800/10 py-2 px-3 rounded-md items-center" >
+            <div key={route._id} className="flex gap-2 justify-between w-full bg-blue-800/10 py-2 px-3 rounded-md items-center" >
               <p>{route.origin} - {route.destination}</p>
               <p>{
                 // converter data para o formato americano
@@ -185,7 +192,6 @@ export default function Admin () {
               <svg
                 onClick={(e) => {
                   handleDeleteRoute(e, route._id)
-                  console.log(route)
                 }
                 }
                 className="cursor-pointer"
