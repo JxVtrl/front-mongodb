@@ -7,6 +7,7 @@ import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useApp } from "@/contexts/contextApi"
 import { login } from "@/utils/backend_functions/login"
+import { useWidth } from "@/utils/functions"
 
 interface FormData {
   email: string
@@ -24,7 +25,8 @@ const Page: React.FC = () => {
   const { setUser, setRecognitionModal } = useApp()
   const [loading, setLoading] = React.useState(false)
   const [showPassword, setShowPassword] = useState(false) // Estado para mostrar/ocultar a senha
-  const isMediaDeviceMobile = window.matchMedia("(max-width: 768px)").matches
+
+  const isMobile = useWidth() < 768
 
   const OnSubmit = async (data: FormData, e: any) => {
     e.preventDefault()
@@ -118,7 +120,7 @@ const Page: React.FC = () => {
             {loading ? "Carregando..." : "Entrar"}
           </button>
         </form>
-        {!isMediaDeviceMobile && (
+        {!isMobile && (
           <button
             className="login-form-button login-form-input"
             onClick={() => setRecognitionModal(true)}

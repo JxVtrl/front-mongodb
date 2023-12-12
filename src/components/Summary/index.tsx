@@ -3,6 +3,7 @@ import LocationIcon from "@/assets/icons/LocationIcon";
 import PersonIcon from "@/assets/icons/PersonIcon";
 import { useApp } from "@/contexts/contextApi";
 import { format_hour } from "@/utils/functions";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef } from "react";
 
@@ -26,7 +27,7 @@ const Summary: React.FC = () => {
       const cardHtml = cardRef.current.innerHTML;
       localStorage.setItem("cardPassagem", cardHtml);
     }
-  }, [passengersInfo, selectedRoute]); // Dependências para atualizar o localStorage quando mudarem
+  }, [passengersInfo, selectedRoute]); 
 
   const [loading, setLoading] = React.useState(false);
 
@@ -69,6 +70,21 @@ const Summary: React.FC = () => {
       const status = response.status;
 
       setCompraRealizada(status === 200);
+      
+      await axios.post("/api/send-email", {
+        email: user?.email,
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+
+        },
+        method: "POST"
+
+      }).then(() => {
+        alert("Email enviado com sucesso!")
+      }).catch(() => {
+        alert("Erro ao enviar email")
+      })
 
       if (status !== 200) throw new Error("Erro ao realizar compra");
 
@@ -133,7 +149,7 @@ const Summary: React.FC = () => {
                 <span className="text-md">Destino</span>
               </div>
               <span className="text-lg font-bold ml-8">
-                {selectedRoute?.origin}
+                {selectedRoute?.destination}
               </span>
             </div>
             <div className="flex flex-col items-end">

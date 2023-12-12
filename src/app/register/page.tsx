@@ -1,33 +1,36 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { useForm } from "react-hook-form"
-import Logo from "@/components/Logo"
-import Link from "next/link"
-import { registro } from "@/utils/backend_functions/registro"
-import { useApp } from "@/contexts/contextApi"
-import { useRouter } from "next/navigation"
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import Logo from "@/components/Logo";
+import Link from "next/link";
+
+import { registro } from "@/utils/backend_functions/registro";
+import { useApp } from "@/contexts/contextApi";
+import { useRouter } from "next/navigation";
+import { useWidth } from "@/utils/functions";
 
 interface FormData {
-  name: string
-  email: string
-  password: string
-  confirmPassword: string
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }
 
+// window width and height using next dimensions
+
 const Register: React.FC = () => {
-  const { setUser, setPhotoModal, photoModalUrl } = useApp()
-  const [loading, setLoading] = React.useState(false)
-  const [step, setStep] = useState(0)
+  const { setUser, setPhotoModal, photoModalUrl } = useApp();
+  const [loading, setLoading] = React.useState(false);
+  const [step, setStep] = useState(0);
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormData>()
-  const router = useRouter()
-
-  const isMediaDeviceMobile = window.matchMedia("(max-width: 768px)").matches
+  } = useForm<FormData>();
+  const router = useRouter();
+  const isMobile = useWidth() < 768;
 
   const onSubmit = async (data: FormData) => {
     if (
@@ -36,54 +39,54 @@ const Register: React.FC = () => {
       errors.password ||
       errors.confirmPassword
     )
-      return
-    if (watch("password") !== watch("confirmPassword")) return
+      return;
+    if (watch("password") !== watch("confirmPassword")) return;
     if (
       !watch("name") ||
       !watch("email") ||
       !watch("password") ||
       !watch("confirmPassword")
     )
-      return
+      return;
 
-    setLoading(true)
+    setLoading(true);
     try {
-      const user = await registro(data)
+      const user = await registro(data);
       if (user) {
         if (user.email === "fernandotrindade@gmail.com") {
-          user.role = "admin"
+          user.role = "admin";
         }
 
-        setUser(user)
-        localStorage.setItem("user", JSON.stringify(user))
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
 
         if (user.role === "admin") {
-          localStorage.setItem("userType", user.role)
+          localStorage.setItem("userType", user.role);
         }
-        if (isMediaDeviceMobile) {
-          router.push("/")
-        } else setStep(1)
-      } else throw new Error("Erro ao cadastrar usuário")
+        if (isMobile) {
+          router.push("/");
+        } else setStep(1);
+      } else throw new Error("Erro ao cadastrar usuário");
     } catch (err) {
-      console.log(err)
+      console.log(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   // Regex para verificar se a senha contém pelo menos um número e um caractere especial
-  const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])/
+  const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])/;
 
   // Função para validar se as senhas coincidem
   const validatePassword = (value: string) => {
-    return value === watch("password") || "As senhas não coincidem"
-  }
+    return value === watch("password") || "As senhas não coincidem";
+  };
 
-  const [showPassword, setShowPassword] = useState(false) // Estado para mostrar/ocultar a senha
+  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar a senha
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
-  }
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="register-page-wrapper">
@@ -240,7 +243,7 @@ const Register: React.FC = () => {
                 ease-in-out
                 "
                     onClick={() => {
-                      router.push("/")
+                      router.push("/");
                     }}
                   >
                     Finalizar
@@ -261,7 +264,7 @@ const Register: React.FC = () => {
                 ease-in-out
                 "
                     onClick={() => {
-                      setPhotoModal(true)
+                      setPhotoModal(true);
                     }}
                   >
                     Configurar FaceID
@@ -279,10 +282,10 @@ const Register: React.FC = () => {
                 ease-in-out
                 "
                     onClick={() => {
-                      setStep(0)
+                      router.push("/");
                     }}
                   >
-                    Voltar
+                    Não quero configurar agora
                   </button>
                 </>
               )}
@@ -295,7 +298,7 @@ const Register: React.FC = () => {
         </span>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
