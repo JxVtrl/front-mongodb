@@ -37,8 +37,8 @@ const Page: React.FC = () => {
             }}
             value={selectedRoute?._id}
         >
-            {rotas.map(rota => {
-                return <option value={rota._id}>{rota.origin} - {rota.destination}</option>
+            {rotas.map((rota,index) => {
+                return <option key={index} value={rota._id}>{rota.origin} - {rota.destination}</option>
             })}
         </select>
         
@@ -53,8 +53,8 @@ const Page: React.FC = () => {
                 </tr>
             </thead>
             <tbody>
-                {selectedRoute?.seats.map(seat => {
-                    return <tr>
+                {selectedRoute?.seats.map((seat,index) => {
+                    return <tr key={index}>
                         <td>{seat.numero}</td>
                         <td>{seat.ocupado}</td>
                         <td>{selectedRoute.origin}</td>
