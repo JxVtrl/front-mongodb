@@ -1,3 +1,5 @@
+'use client'
+
 import { useApp } from '@/contexts/contextApi';
 import { Rota } from '@/types';
 import React, { useState } from 'react';
