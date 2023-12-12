@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from "react"
 import { cidades } from "../data/cidades"
 import { Rota } from "../types"
