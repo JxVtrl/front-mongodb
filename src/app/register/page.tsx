@@ -16,7 +16,7 @@ interface FormData {
 }
 
 const Register: React.FC = () => {
-  const { setUser, setPhotoModal } = useApp();
+  const { setUser, setPhotoModal, photoModalUrl } = useApp();
   const [loading, setLoading] = React.useState(false);
   const [step, setStep] = useState(0);
   const {
@@ -25,6 +25,7 @@ const Register: React.FC = () => {
     watch,
     formState: { errors },
   } = useForm<FormData>();
+  const router = useRouter();
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
@@ -176,11 +177,22 @@ const Register: React.FC = () => {
               <input
                 className="register-form-button register-form-input"
                 onClick={() => {
-                  
-                  // if (errors.name || errors.email || errors.password || errors.confirmPassword) return
-                  // if (watch("password") !== watch("confirmPassword")) return
-                  // if(!watch("name") || !watch("email") || !watch("password") || !watch("confirmPassword")) return
-                  setStep(1)
+                  if (
+                    errors.name ||
+                    errors.email ||
+                    errors.password ||
+                    errors.confirmPassword
+                  )
+                    return;
+                  if (watch("password") !== watch("confirmPassword")) return;
+                  if (
+                    !watch("name") ||
+                    !watch("email") ||
+                    !watch("password") ||
+                    !watch("confirmPassword")
+                  )
+                    return;
+                  setStep(1);
                 }}
                 type="submit"
                 disabled={loading}
@@ -189,22 +201,45 @@ const Register: React.FC = () => {
             </>
           )}
           {step === 1 && (
-            // Configure seu faceid
-            <div className="
+            <div
+              className="
             flex
             flex-col
             justify-center
             items-center
             gap-5
 
-            ">
-              <h2>Configure seu FaceID</h2>
+            "
+            >
+              <h2>{photoModalUrl ? 'Obrigado pelo seu cadastro' : 'Configure seu FaceID'}</h2>
               <p>
-                Para configurar seu FaceID, clique no botão abaixo e posicione
-                seu rosto dentro do círculo. Após isso, clique em &quot;Cadastrar&quot;.
+                {photoModalUrl ? 'Seu cadastro foi realizado com sucesso. Clique no botão abaixo para voltar para a página inicial.'
+                : 'Para configurar seu FaceID, clique no botão abaixo e posicione seu rosto dentro do círculo. Após isso, clique em "Cadastrar".'}
               </p>
-              <button
-                className="
+              {photoModalUrl ? (
+                <>
+                  <button
+                    className="bg-blue-500
+                text-white
+                rounded-md
+                px-3
+                py-2
+                hover:bg-blue-600
+                transition
+                duration-200
+                ease-in-out
+                "
+                    onClick={() => {
+                      router.push("/");
+                    }}
+                  >
+                    Finalizar
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="
                 bg-blue-500
                 text-white
                 rounded-md
@@ -215,14 +250,14 @@ const Register: React.FC = () => {
                 duration-200
                 ease-in-out
                 "
-                onClick={() => {
-                  setPhotoModal(true);
-                }}
-              >
-                Configurar FaceID
-              </button>
-              <button
-                className="
+                    onClick={() => {
+                      setPhotoModal(true);
+                    }}
+                  >
+                    Configurar FaceID
+                  </button>
+                  <button
+                    className="
                 bg-gray-500
                 text-white
                 rounded-md
@@ -233,12 +268,14 @@ const Register: React.FC = () => {
                 duration-200
                 ease-in-out
                 "
-                onClick={() => {
-                  setStep(0);
-                }}
-              >
-                Voltar
-              </button>
+                    onClick={() => {
+                      setStep(0);
+                    }}
+                  >
+                    Voltar
+                  </button>
+                </>
+              )}
             </div>
           )}
         </form>
