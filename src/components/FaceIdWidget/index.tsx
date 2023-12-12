@@ -8,7 +8,6 @@ import CloseIcon from "@/assets/icons/CloseIcon";
 export default function FaceIdWidget() {
   const { recognitionModal, setRecognitionModal } = useApp();
   const [videoLoading, setVideoLoading] = useState(false);
-  const [faceMaisProxima, setFaceMaisProxima] = useState("Desconhecido");
 
   const videoRef = useRef<HTMLVideoElement>(document.createElement("video"));
   const canvasRef = useRef<HTMLCanvasElement>(document.createElement("canvas"));
@@ -209,8 +208,6 @@ export default function FaceIdWidget() {
               [text],
               resizedDetections[0].detection.box.bottomLeft
             ).draw(canvas);
-
-            setFaceMaisProxima(text);
           }
 
           requestAnimationFrame(updateFaceRecognition);
