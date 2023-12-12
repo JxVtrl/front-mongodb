@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import * as faceApi from "face-api.js";
 import { useApp } from "@/contexts/contextApi";
@@ -10,110 +9,214 @@ export default function FaceIdWidget() {
   const { recognitionModal, setRecognitionModal } = useApp();
   const [videoLoading, setVideoLoading] = useState(false);
 
-  const videoRef = useRef<HTMLVideoElement>(
-    null as unknown as HTMLVideoElement
-  );
-  const canvasRef = useRef<HTMLCanvasElement>(
-    null as unknown as HTMLCanvasElement
-  );
+  const videoRef = useRef<HTMLVideoElement>(document.createElement("video"));
+  const canvasRef = useRef<HTMLCanvasElement>(document.createElement("canvas"));
   const [faceMatcher, setFaceMatcher] = useState<faceApi.FaceMatcher | null>(
     null
   );
 
   const loadModels = useCallback(async () => {
+    console.log("Carregando modelos...");
     setVideoLoading(true);
     const MODEL_URL = "/models";
-    await faceApi.loadSsdMobilenetv1Model(MODEL_URL);
-    await faceApi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-    await faceApi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-    await faceApi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-    await faceApi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
-  }, []);
+    try {
+      await faceApi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
+      await faceApi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+      await faceApi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+      await faceApi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+      console.log("Modelos carregados com sucesso.");
 
-  const startVideo = useCallback(async () => {
-    if (videoRef.current) {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      videoRef.current.srcObject = stream;
-    }
-  }, []);
+      const facesList = [
+        {
+          name: "João",
+          descriptors: [
+            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249589/teste/face_01/d6cotq9soibu0mo1xpeg.jpg",
+            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249590/teste/face_01/ciyzoasqglmcrx7vvdkx.jpg",
+            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249589/teste/face_01/igfguokymw8gu2h9kjxu.jpg",
+            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702339010/teste/face_02/javjullo1u5ap3bkbhtl.jpg",
+          ],
+        },
+        {
+          name: "Marcelo",
+          descriptors: [
+            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702339022/teste/face_03/gcbfoqicmwj9ineavqid.jpg",
+            "https://res.cloudinary.com/dppimfdxy/image/upload/v1702339021/teste/face_03/mvjixwmkzygsi2lvb33u.jpg",
+          ],
+        },
+      ];
+      const augmentedMockFacesList =
+        (await facesListInDifferentAngles(facesList)) || [];
 
-  const transformDescriptors = useCallback(async (descriptors: any) => {
-    const float32Array = [];
-    for (let descriptor of descriptors) {
-      const result = await descriptor;
-      if (result) {
-        float32Array.push(new Float32Array(result.descriptor));
-      }
-    }
-    return float32Array;
-  }, []);
+      console.log("Lista de faces mockadas:", augmentedMockFacesList);
 
-  const createFaceMatcher = useCallback(async () => {
-    const facesMock = [
-      {
-        name: "João",
-        descriptors: [
-          "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249589/teste/face_01/d6cotq9soibu0mo1xpeg.jpg",
-          "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249590/teste/face_01/ciyzoasqglmcrx7vvdkx.jpg",
-          "https://res.cloudinary.com/dppimfdxy/image/upload/v1702249589/teste/face_01/igfguokymw8gu2h9kjxu.jpg",
-        ],
-      },
-    ];
-
-    const labeledFaceDescriptors = facesMock.map(async (face) => {
-      const descriptors = face.descriptors.map((url) => {
-        const cloudinaryCore = new cloudinary.Cloudinary({
-          cloud_name: "dppimfdxy",
-          api_key: "893146136213397",
-          api_secret: "vHvFad6vFvYL2fSzZXtl38ahSMQ",
-          secure: true,
-        });
-        const response = cloudinaryCore.url(url, {
-          resource_type: "image",
-        });
-        console.log(response);
-
-        const img = document.createElement("img");
-        img.crossOrigin = "anonymous";
-        img.src = response;
-
-        return faceApi
-          .detectSingleFace(img)
-          .withFaceLandmarks()
-          .withFaceDescriptor();
+      const labeledMockFaceDescriptors = augmentedMockFacesList.map((face) => {
+        return new faceApi.LabeledFaceDescriptors(
+          face.name,
+          face.descriptors.flat()
+        );
       });
 
-      const float32Array = await transformDescriptors(descriptors);
+      console.log("Descritores de faces mockadas:", labeledMockFaceDescriptors);
 
-      return new faceApi.LabeledFaceDescriptors(face.name, float32Array);
-    });
+      const labeledMockFaceDescriptorsResolved = await Promise.all(
+        labeledMockFaceDescriptors
+      );
 
-    Promise.all(labeledFaceDescriptors).then((labeledFaceDescriptors) => {
-      if (labeledFaceDescriptors.length > 0) {
+      console.log(
+        "Descritores de faces mockadas resolvidos:",
+        labeledMockFaceDescriptorsResolved
+      );
+
+      if (labeledMockFaceDescriptorsResolved.length > 0) {
         const faceMatcher = new faceApi.FaceMatcher(
-          labeledFaceDescriptors,
+          labeledMockFaceDescriptorsResolved,
           0.6
         );
         setFaceMatcher(faceMatcher);
       }
-    });
-  }, [transformDescriptors]);
+    } catch (error) {
+      console.error("Erro ao carregar modelos:", error);
+      console.error("A detecção facial não funcionará corretamente.");
+    } finally {
+      setVideoLoading(false);
+    }
+  }, []);
 
-  useEffect(() => {
-    console.log(faceMatcher);
-  }, [faceMatcher]);
+  const startVideo = useCallback(async () => {
+    console.log("Iniciando vídeo...");
+    const video = videoRef.current;
+    if (video) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
+        video.srcObject = stream;
+        console.log("Vídeo iniciado com sucesso.");
+      } catch (err) {
+        console.error("Erro ao iniciar o vídeo:", err);
+      }
+    }
+  }, []);
 
-  useEffect(() => {
-    setFaceMatcher(null);
-    loadModels()
-      .then(() => {
-        createFaceMatcher();
-        startVideo();
-      })
-      .finally(() => {
-        setVideoLoading(false);
+  const getFacesList = async () => {
+    try {
+      const cloudinaryCore = new cloudinary.Cloudinary({
+        cloud_name: "dppimfdxy",
+        api_key: "893146136213397",
+        api_secret: "vHvFad6vFvYL2fSzZXtl38ahSMQ",
+        secure: true,
       });
-  }, [loadModels, createFaceMatcher, startVideo]);
+
+      const response = await fetch(cloudinaryCore.url("faces.json"));
+      const facesList = await response.json();
+      return facesList; // Adiciona o retorno da lista de faces
+    } catch (error) {
+      console.error("Erro ao obter a lista de faces:", error);
+      return []; // Retorna uma lista vazia em caso de erro
+    }
+  };
+
+  // Função para criar descritores em diferentes ângulos e orientações
+  const facesListInDifferentAngles = async (facesList: any) => {
+    const augmentedDescriptors = [];
+
+    for (const face of facesList) {
+      const augmentedFace = { ...face };
+      augmentedFace.descriptors = [];
+
+      for (const url of face.descriptors) {
+        const img = await faceApi.fetchImage(url);
+        const detections = await faceApi
+          .detectSingleFace(img)
+          .withFaceLandmarks()
+          .withFaceDescriptor();
+
+        if (detections) {
+          augmentedFace.descriptors.push(detections.descriptor);
+
+          // Adicione variações de ângulo ou orientação aqui
+          // Exemplo: Rotacionar a imagem e adicionar novos descritores
+          const rotatedImage = faceApi.createCanvasFromMedia(img);
+          const ctx = rotatedImage.getContext("2d");
+          if (!ctx) return;
+          ctx.translate(img.width / 2, img.height / 2);
+          ctx.rotate(Math.PI / 4); // Ângulo de rotação em radianos
+          ctx.drawImage(
+            img,
+            -img.width / 2,
+            -img.height / 2,
+            img.width,
+            img.height
+          );
+
+          const rotatedDetections = await faceApi
+            .detectSingleFace(rotatedImage)
+            .withFaceLandmarks()
+            .withFaceDescriptor();
+
+          if (rotatedDetections) {
+            augmentedFace.descriptors.push(rotatedDetections.descriptor);
+          }
+        }
+      }
+
+      augmentedDescriptors.push(augmentedFace);
+    }
+
+    return augmentedDescriptors;
+  };
+
+  useEffect(() => {
+    if (recognitionModal) {
+      loadModels()
+        .then(() => startVideo())
+        .catch((error) => {
+          console.error("Erro durante o carregamento:", error);
+        });
+    }
+  }, [recognitionModal, loadModels, startVideo]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (recognitionModal && video && faceMatcher) {
+      video.addEventListener("play", async () => {
+        const canvas = canvasRef.current;
+        const displaySize = { width: 300, height: 225 };
+        faceApi.matchDimensions(canvas, displaySize);
+
+        const updateFaceRecognition = async () => {
+          const detections = await faceApi
+            .detectAllFaces(video)
+            .withFaceLandmarks()
+            .withFaceDescriptors();
+
+          const resizedDetections = faceApi.resizeResults(
+            detections,
+            displaySize
+          );
+
+          canvas
+            ?.getContext("2d")
+            ?.clearRect(0, 0, canvas.width, canvas.height);
+
+          if (resizedDetections.length > 0) {
+            const bestMatch = faceMatcher.findBestMatch(
+              resizedDetections[0].descriptor
+            );
+
+            const text = bestMatch.label || "Desconhecido";
+
+            new faceApi.draw.DrawTextField(
+              [text],
+              resizedDetections[0].detection.box.bottomLeft
+            ).draw(canvas);
+          }
+
+          requestAnimationFrame(updateFaceRecognition);
+        };
+
+        updateFaceRecognition();
+      });
+    }
+  }, [recognitionModal, faceMatcher]);
 
   if (!recognitionModal) return null;
 
@@ -122,63 +225,26 @@ export default function FaceIdWidget() {
       <div className="bg-white shadow-lg rounded-lg flex justify-center h-fit w-[600px] p-6 relative">
         <CloseIcon
           onClick={() => setRecognitionModal(false)}
-          className="absolute
-        top-0
-        right-0
-        m-4
-        cursor-pointer"
+          className="absolute top-0 right-0 m-4 cursor-pointer"
         />
 
-        <div className="flex w-[300px] h-[300px] relative rounded-[50%] flex-column gap-5 items-center justify-center">
-          {videoLoading ? (
-            <div className="flex justify-center items-center h-full w-full">
-              <span className="text-black">Carregando...</span>
-            </div>
-          ) : (
-            <>
-              <div
-                className="
-    relative
-    w-full
-    h-full
-    overflow-hidden
-"
-              >
-                <video
-                  id="video"
-                  width="100%"
-                  height="100%"
-                  autoPlay
-                  muted
-                  ref={videoRef}
-                />
-                <canvas
-                  id="canvas"
-                  ref={canvasRef}
-                  className="absolute top-0 left-0 w-full h-full"
-                />
-              </div>
-              {faceMatcher ? (
-                <span
-                  className="
-                  absolute
-                  bottom-0
-                  left-0
-                  w-full
-                  text-center
-                  
-                "
-                >
-                  {faceMatcher.labeledDescriptors.map((label, index) => {
-                    const name = label.label;
-                    return <span key={index}>{name}</span>;
-                  })}
-                </span>
-              ) : (
-                <span>Usuário Desconhecido</span>
-              )}
-            </>
-          )}
+        <div className="flex w-[300px] relative flex-col gap-5 items-center justify-center">
+          <div className="relative w-[300px] h-[225px] overflow-hidden">
+            <video
+              id="video"
+              width="300px"
+              height="225px"
+              autoPlay
+              muted
+              ref={videoRef}
+            />
+            <canvas
+              id="canvas"
+              ref={canvasRef}
+              className="absolute top-0 left-0 w-[300px] h-[225px]"
+            />
+          </div>
+          {videoLoading && <span>Carregando...</span>}
         </div>
       </div>
     </div>
