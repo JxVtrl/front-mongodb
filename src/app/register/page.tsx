@@ -4,9 +4,11 @@ import React, { useState } from "react"
 import { useForm } from "react-hook-form"
 import Logo from "@/components/Logo"
 import Link from "next/link"
+
 import { registro } from "@/utils/backend_functions/registro"
 import { useApp } from "@/contexts/contextApi"
 import { useRouter } from "next/navigation"
+import { useWidth } from "@/utils/functions"
 
 interface FormData {
   name: string
@@ -14,6 +16,9 @@ interface FormData {
   password: string
   confirmPassword: string
 }
+
+// window width and height using next dimensions
+
 
 const Register: React.FC = () => {
   const { setUser, setPhotoModal, photoModalUrl } = useApp()
@@ -26,8 +31,8 @@ const Register: React.FC = () => {
     formState: { errors },
   } = useForm<FormData>()
   const router = useRouter()
+  const isMobile =useWidth() < 768
 
-  const isMediaDeviceMobile = window.matchMedia("(max-width: 768px)").matches
 
   const onSubmit = async (data: FormData) => {
     if (
@@ -60,7 +65,7 @@ const Register: React.FC = () => {
         if (user.role === "admin") {
           localStorage.setItem("userType", user.role)
         }
-        if (isMediaDeviceMobile) {
+        if (isMobile) {
           router.push("/")
         } else setStep(1)
       } else throw new Error("Erro ao cadastrar usuário")

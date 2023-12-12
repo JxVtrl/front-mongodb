@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react"
 import { cidades } from "../data/cidades"
 import { Rota } from "../types"
 import { faker } from "@faker-js/faker"
@@ -201,6 +202,17 @@ export const validateCpf = (cpf: string) => {
   console.log("CPF válido")
   return true
 };
+
+export const useWidth = () => {
+  const [width, setWidth] = useState(0)
+  const handleResize = () => setWidth(window.innerWidth)
+  useEffect(() => {
+      handleResize()
+      window.addEventListener('resize', handleResize)
+      return () => window.removeEventListener('resize', handleResize)
+  }, []) // empty
+  return width
+}
 
 export const getCoordsInGoogleMaps = async (cidade: string) => {
   try {
