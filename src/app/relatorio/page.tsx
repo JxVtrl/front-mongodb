@@ -62,8 +62,7 @@ const Page: React.FC = () => {
                 <tr>
                     <th>Numero</th>
                     <th>Ocupado</th>
-                    <th>Origem</th>
-                    <th>Destino</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -71,8 +70,6 @@ const Page: React.FC = () => {
                     return <tr key={index}>
                         <td>{seat.numero}</td>
                         <td>{seat.ocupado}</td>
-                        <td>{selectedRoute.origin}</td>
-                        <td>{selectedRoute.destination}</td>
                     </tr>
                 })}
             </tbody>
