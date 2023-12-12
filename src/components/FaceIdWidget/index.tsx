@@ -10,8 +10,12 @@ export default function FaceIdWidget() {
   const { recognitionModal, setRecognitionModal } = useApp();
   const [videoLoading, setVideoLoading] = useState(false);
 
-  const videoRef = useRef<HTMLVideoElement>(document.createElement("video"));
-  const canvasRef = useRef<HTMLCanvasElement>(document.createElement("canvas"));
+  const videoRef = useRef<HTMLVideoElement>(
+    null
+  );
+  const canvasRef = useRef<HTMLCanvasElement>(
+    null
+  );
   const [faceMatcher, setFaceMatcher] = useState<faceApi.FaceMatcher | null>(
     null
   );
@@ -217,7 +221,7 @@ export default function FaceIdWidget() {
       video.addEventListener("play", async () => {
         const canvas = canvasRef.current;
         const displaySize = { width: 300, height: 225 };
-        faceApi.matchDimensions(canvas, displaySize);
+        faceApi.matchDimensions(canvas!, displaySize);
 
         const updateFaceRecognition = async () => {
           const detections = await faceApi
@@ -244,7 +248,7 @@ export default function FaceIdWidget() {
             new faceApi.draw.DrawTextField(
               [text],
               resizedDetections[0].detection.box.bottomLeft
-            ).draw(canvas);
+            ).draw(canvas!);
           }
 
           requestAnimationFrame(updateFaceRecognition);
