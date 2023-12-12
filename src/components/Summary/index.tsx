@@ -15,7 +15,8 @@ const Summary: React.FC = () => {
     user,
     setModalAgradecimento,
     setCompraRealizada,
-    compraRealizada
+    compraRealizada,
+    validCpf
   } = useApp();
 
   const [loading, setLoading] = React.useState(false);
@@ -158,7 +159,7 @@ const Summary: React.FC = () => {
             ? "opacity-50 cursor-not-allowed"
             : "bg-blue-500 hover:bg-blue-600 text-white"
         } rounded-xl p-2 shadow-md`}
-        disabled={!checkIfPassengersInfoIsFilled() || loading}
+        disabled={!checkIfPassengersInfoIsFilled() || loading || !validCpf}
         onClick={() => {
           if (checkoutStep === 0) setCheckoutStep(checkoutStep + 1);
           else {

@@ -2,6 +2,7 @@
 import CloseIcon from "@/assets/icons/CloseIcon";
 import Switch from "@/components/Switch";
 import { useApp } from "@/contexts/contextApi";
+import { validateCpf } from "@/utils/functions";
 import React from "react";
 
 const PassengersInfo: React.FC = () => {
@@ -11,6 +12,8 @@ const PassengersInfo: React.FC = () => {
     setPassengersInfo,
     passengersInfo,
     user,
+    validCpf,
+    setValidCpf
   } = useApp();
   const [userPassenger, setUserPassenger] = React.useState(false);
 
@@ -116,8 +119,16 @@ const PassengersInfo: React.FC = () => {
                   const newPassengersInfo = [...passengersInfo];
                   newPassengersInfo[index].passenger.cpf = e.target.value;
                   setPassengersInfo(newPassengersInfo);
+                  validateCpf(passengerInfo.passenger.cpf) ? setValidCpf(true) : setValidCpf(false);
+
                 }}
+                disabled={userPassenger && index === 0 && !!user?.cpf}
+                
               />
+              {passengerInfo.passenger.cpf && !validCpf && <p style={{
+                color: "#f00"
+              }}>CPF Inválido, insira um cpf válido!</p>}
+              
             </div>
           </div>
         ))
