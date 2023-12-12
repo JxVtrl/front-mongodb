@@ -15,25 +15,25 @@ const TripItem: React.FC<TripItemProps> = ({ rota }) => {
     <Link
       href={{
         pathname: `/selecionar`,
-        query: { id: rota.id },
+        query: { id: rota._id },
       }}
-      key={rota.id}
+      key={rota._id}
       className="w-full max-w-[800px] bg-white shadow-md my mx-auto rounded-md cursor-pointer hover:shadow-lg transition duration-200 ease-in-out p-5 gap-3 flex flex-col"
     >
       <div className="flex justify-between items-center">
         <div>
           <div className="flex items-center justify-center text-center gap-2">
             <h3>
-              <b>{rota.origem}</b> - {format_hour(rota.departureTime)}
+              <b>{rota.origin}</b> - {format_hour(rota.departureTime)}
             </h3>
             <ArrowRight />
             <h3>
-              <b>{rota.destino}</b> - {format_hour(rota.hora_chegada)}
+              <b>{rota.destination}</b> - {format_hour(rota.departureTime)}
             </h3>
           </div>
           <p>{format_date(rota.departureDate)}</p>
         </div>
-        <p className="text-xl font-bold text-green-500">R$ {rota.valor}</p>
+        {/* <p className="text-xl font-bold text-green-500">R$ {rota.valor}</p> */}
       </div>
       <SelectedMap route={rota} />
     </Link>

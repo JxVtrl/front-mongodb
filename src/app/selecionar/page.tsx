@@ -16,7 +16,7 @@ const Page: React.FC = () => {
   React.useEffect(() => {
     if (!id) return
 
-    const route = rotas.find((rota) => rota.id === Number(id))
+    const route = rotas.find((rota) => rota._id === Number(id))
 
     if (!route) {
       router.push("/")
