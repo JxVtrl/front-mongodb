@@ -14,6 +14,42 @@ const routeSchema = new Schema({
     type: String,
     // default: Date.now,
   },
+  origin_coords: {
+    lat: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
+  },
+  destination_coords: {
+    lat: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
+  },
+  arrive_date: {
+    type: String,
+  },
+  arrive_time: {
+    type: String,
+  },
+  seats: [{
+    id: {
+      type: Number,
+    },
+    numero: {
+      type: Number,
+    },
+    ocupado: {
+      type: Boolean,
+    },
+  }],
+  value: {
+    type: Number,
+  },
 })
 
 export default models.Route || model("Route", routeSchema)

@@ -49,7 +49,7 @@ const Content: React.FC = () => {
             {loading
               ? "Salvando dados..."
               : seatsSelected.length > 6
-              ? "Limite de assentos excedido"
+              ? "Limite de seats excedido"
               : "Salvar dados e ir para pagamento"}
           </button>
         </div>

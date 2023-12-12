@@ -46,7 +46,7 @@ const Summary: React.FC = () => {
           user,
           quantidadeDePassageiros: passengersInfo.length,
           rota: selectedRoute,
-          precoTotal: selectedRoute?.valor || 100 * passengersInfo.length,
+          precoTotal: selectedRoute?.value || 100 * passengersInfo.length,
           passageiros: passengersInfo.map((passengerInfo) => {
             return {
               nome: passengerInfo.passenger.name,
@@ -126,7 +126,7 @@ const Summary: React.FC = () => {
             <div className="flex flex-col items-end">
               <span className="text-md">Chegada</span>
               <span className="text-lg font-bold">
-                {format_hour(selectedRoute.hora_chegada)}
+                {format_hour(selectedRoute.arrive_time)}
               </span>
             </div>
           </div>

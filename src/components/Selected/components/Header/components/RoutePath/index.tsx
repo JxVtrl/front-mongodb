@@ -13,9 +13,9 @@ const RoutePath: React.FC = () => {
   return (
     <div className="flex flex-row items-center gap-[8px]">
       <LocationIcon />
-      <p className="text-sm text-gray-500">{selectedRoute?.origem}</p>
+      <p className="text-sm text-gray-500">{selectedRoute?.origin}</p>
       <ArrowRight />
-      <p className="text-sm text-gray-500">{selectedRoute?.destino}</p>
+      <p className="text-sm text-gray-500">{selectedRoute?.destination}</p>
     </div>
   )
 }

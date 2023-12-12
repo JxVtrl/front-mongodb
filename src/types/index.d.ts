@@ -11,21 +11,21 @@ export type Assento = {
 }
 
 export type Rota = {
-    _id: number,
+    _id: number | string,
     origin: string,
-    // origem_coords: {
-    //     lat: number,
-    //     lng: number,
-    // },
+    origin_coords: {
+        lat: number,
+        lng: number,
+    },
     destination: string,
-    // destino_coords: {
-    //     lat: number,
-    //     lng: number,
-    // },
+    destination_coords: {
+        lat: number,
+        lng: number,
+    },
     departureTime: string,
     departureDate: string,
-    // data_chegada: string,
-    // hora_chegada: string,
-    // assentos: Assento[],
-    // valor: number,
+    arrive_date?: string,
+    arrive_time?: string,
+    seats: Assento[],
+    value: number,
 }

@@ -8,12 +8,12 @@ const BusSeats: React.FC = () => {
 
   if (!selectedRoute) return null
 
-  const { assentos } = selectedRoute
+  const { seats } = selectedRoute
 
   return (
     <div className="w-full h-[300px] flex flex-col justify-center items-center rounded-xl relative bg-gray-100 shadow-md overflow-hidden">
       <div className="absolute grid grid-flow-col grid-rows-4 gap-2 w-[80%] h-[75%] bus-seats-icons">
-        {assentos.map((seat) => (
+        {seats.map((seat) => (
           <div
             key={seat.id}
             className={`w-full h-full rounded-full flex items-center justify-center relative hover:scale-110 transition-all  duration-200 ${

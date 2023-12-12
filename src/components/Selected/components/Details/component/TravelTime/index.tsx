@@ -23,14 +23,14 @@ const TravelTime: React.FC = () => {
         <div className="flex items-center gap-4">
           <ClockIcon />
           <div>
-            <span>Chegada {format_hour(selectedRoute?.hora_chegada)}</span>
+            <span>Chegada {format_hour(selectedRoute?.arrive_time || "00:00")}</span>
           </div>
         </div>
       </div>
       <span>
         Previsão de{" "}
         <b id='duration'>
-          {travelTime(selectedRoute?.departureTime, selectedRoute?.hora_chegada)}
+          {travelTime(selectedRoute?.departureTime, selectedRoute?.arrive_time || "00:00")}
         </b>{" "}
         de viagem
       </span>

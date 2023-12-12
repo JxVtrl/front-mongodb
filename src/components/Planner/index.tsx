@@ -40,8 +40,8 @@ const Planner: React.FC = () => {
     
     const rotaEncontrada = rotas.find(
       (rota) =>
-        rota.origem === data.origem &&
-        rota.destino === data.destino &&
+        rota.origin === data.origem &&
+        rota.destination === data.destino &&
         rota.departureDate === dataReverse
     )
     
@@ -50,7 +50,7 @@ const Planner: React.FC = () => {
       alert("Não foi possível encontrar uma rota com os dados informados")
       return
     } else {
-      router.push(`/selecionar?id=${rotaEncontrada.id}`)
+      router.push(`/selecionar?id=${rotaEncontrada._id}`)
     }
       
   }

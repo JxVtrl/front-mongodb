@@ -26,6 +26,17 @@ export const random_date = (start: Date, end: Date) => {
 
 export const format_date = (date: string) => {
   if (!date) return ""
+  console.log(date)
+  
+  // check if date is in the format of utc "2021-10-10T00:00:00.000Z"
+  if (date.includes("T")) {
+    const dateSplit = date.split("T")[0].split("-")
+    const day = dateSplit[2]
+    const month = dateSplit[1]
+    const year = dateSplit[0]
+
+    return `${day}/${month}/${year}`
+  }
   
   const dateSplit = date.split("/")
 
@@ -95,27 +106,27 @@ export const generate_user = () => {
   return user
 }
 
-export const gerarAssentos = () => {
-  let assentos = []
+export const gerarseats = () => {
+  let seats = []
 
   for (let i = 0; i < 48; i++) {
-    assentos.push({
+    seats.push({
       id: i,
       numero: i + 1,
       ocupado: random_boolean(),
     })
   }
 
-  return assentos
+  return seats
 }
 
-export const gerarValor = (min = 0, max = 1000) => {
+export const gerarvalue = (min = 0, max = 1000) => {
   return Math.floor(Math.random() * (max - min) + min)
 }
 
-export function travelTime(departureTime: string, hora_chegada: string) {
+export function travelTime(departureTime: string, arrive_time: string) {
   const [horaIdaHours, horaIdaMinutes] = departureTime.split(":").map(Number)
-  const [horaChegadaHours, horaChegadaMinutes] = hora_chegada
+  const [horaChegadaHours, horaChegadaMinutes] = arrive_time
     .split(":")
     .map(Number)
 
@@ -145,7 +156,9 @@ export const getCoordsInGoogleMaps = async (cidade: string) => {
     )
 
     const data = await response.json()
-    return data.results[0].geometry.location
+    const location = data.results[0].geometry.location
+    
+    return location
   } catch (error) {
     return false
   }
@@ -160,11 +173,11 @@ export const criar_rotas = async () => {
       Math.floor(Math.random() * cidades.length)
     ]
 
-    let origem_coords = await getCoordsInGoogleMaps(origem)
+    let origin_coords = await getCoordsInGoogleMaps(origem)
     do {
       origem = cidades[Math.floor(Math.random() * cidades.length)]
-      origem_coords = await getCoordsInGoogleMaps(origem)
-    } while (!origem_coords)
+      origin_coords = await getCoordsInGoogleMaps(origem)
+    } while (!origin_coords)
 
     let destino_coords = await getCoordsInGoogleMaps(destino)
     do {
@@ -183,26 +196,26 @@ export const criar_rotas = async () => {
     let random_year = Math.floor(Math.random() * 2) + 2024
 
     let departureDate = `${random_day}/${random_month}/${random_year}`
-    let data_chegada = `${random_day}/${random_month}/${random_year}`
+    let arrive_date = `${random_day}/${random_month}/${random_year}`
 
-    let rota: Rota = {
-      _id: i,
-      origem,
-      origem_coords,
-      destino,
-      destino_coords,
-      departureDate,
-      departureTime: `${Math.floor(Math.random() * 24)}:${Math.floor(
-        Math.random() * 60
-      )}`,
-      data_chegada,
-      hora_chegada: `${Math.floor(Math.random() * 24)}:${Math.floor(
-        Math.random() * 60
-      )}`,
-      assentos: gerarAssentos(),
-      valor: gerarValor(),
-    }
-    rotas.push(rota)
+    // let rota: Rota = {
+    //   _id: i,
+    //   origem,
+    //   origin_coords,
+    //   destino,
+    //   destino_coords,
+    //   departureDate,
+    //   departureTime: `${Math.floor(Math.random() * 24)}:${Math.floor(
+    //     Math.random() * 60
+    //   )}`,
+    //   arrive_date,
+    //   arrive_time: `${Math.floor(Math.random() * 24)}:${Math.floor(
+    //     Math.random() * 60
+    //   )}`,
+    //   seats: gerarseats(),
+    //   value: gerarvalue(),
+    // }
+    // rotas.push(rota)
   }
 
   return rotas

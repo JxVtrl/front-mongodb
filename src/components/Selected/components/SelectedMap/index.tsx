@@ -9,6 +9,8 @@ type SelectedMapProps = {
 const SelectedMap: React.FC<SelectedMapProps> = ({ route }) => {
   const mapRef = React.useRef<HTMLDivElement>(document.createElement("div"))
 
+  console.log(route)
+  
   const initMap = async (
     origin: {
       lat: any
@@ -69,7 +71,7 @@ const SelectedMap: React.FC<SelectedMapProps> = ({ route }) => {
 
   useEffect(() => {
     if (!route) return
-    initMap(route.origem_coords, route.destino_coords)
+    initMap(route.origin_coords, route.destination_coords)
   }, [route])
 
   return (
