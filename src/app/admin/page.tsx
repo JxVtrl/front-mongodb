@@ -36,7 +36,6 @@ export default function Admin () {
 
       if (response.status == 201) {
       alert("Rota cadastrada com sucesso")
-      router.push("/");
       }
       
       if (response.status == 409) {
@@ -67,7 +66,7 @@ export default function Admin () {
           alert("Rota deletada com sucesso");
           router.push("/admin")
         }).finally(() => {
-          const newRotas = rotas.filter((rota) => rota._id !== id);
+          const newRotas = rotas.filter((rota) => rota.id !== id);
           setRotas( newRotas);
         });
     } catch (err) {
@@ -171,13 +170,15 @@ export default function Admin () {
       )}
       {selectedButton === "Apagar rota existente" && (
         <>
-          {rotas && rotas.map((route) => (
-            <div className="flex justify-between w-full bg-blue-800/10 py-2 px-3 rounded-md items-center" key={route._id}>
-              <p>{route.origin} - {route.destination}</p>
+          {rotas.map((route) => (
+            <div key={route.id} className="flex justify-between w-full bg-blue-800/10 py-2 px-3 rounded-md items-center" >
+              <p>{route.origem} - {route.destino}</p>
               <svg
                 onClick={(e) => {
-                  handleDeleteRoute(e, route._id)
-                console.log(route._id)}}
+                  handleDeleteRoute(e, route.id)
+                  console.log(route)
+                }
+                }
                 className="cursor-pointer"
                 viewBox="0 0 1024 1024"
                 fill="currentColor"
