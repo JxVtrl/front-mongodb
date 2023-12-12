@@ -64,6 +64,8 @@ interface ContextProps {
   setRecognitionModal: React.Dispatch<React.SetStateAction<boolean>>;
   userProfileImage: string;
   setUserProfileImage: React.Dispatch<React.SetStateAction<string>>;
+  photoModal: boolean;
+  setPhotoModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<ContextProps>({} as ContextProps);
@@ -75,6 +77,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectSeatModal, setSelectSeatModal] = useState(false);
   const [seatsSelected, setSeatsSelected] = useState<Assento[]>([]);
   const [checkoutStep, setCheckoutStep] = useState(0);
+  const [photoModal, setPhotoModal] = useState(false);
   const [paymentType, setPaymentType] = useState<
     "credit_card" | "pix" | "boleto"
   >("pix");
@@ -150,6 +153,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     setUserProfileImage,
       recognitionModal,
     setRecognitionModal,
+    photoModal,
+    setPhotoModal,
   }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

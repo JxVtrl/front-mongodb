@@ -7,6 +7,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@cloudinary/react": "^1.11.2",
+    "@cloudinary/url-gen": "^1.14.0",
     "@googlemaps/js-api-loader": "^1.16.2",
     "@types/react-dom": "^18.2.17",
     "autoprefixer": "^10.4.16",
