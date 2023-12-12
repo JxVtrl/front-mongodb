@@ -13,7 +13,7 @@ const DateShow: React.FC = () => {
     <div className="flex items-center gap-[4px]">
       <CalendarIcon />
       <span className="text-[#A0A0A0] text-sm mx-[4px]">
-        {format_date(selectedRoute.data_ida)} - {format_hour(selectedRoute?.hora_ida)}
+        {format_date(selectedRoute.departureDate)} - {format_hour(selectedRoute?.departureTime)}
       </span>
     </div>
   )

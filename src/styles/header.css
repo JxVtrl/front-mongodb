@@ -1,9 +1,15 @@
-.header-container {
+/* .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 50px;
+
+@media (max-width: 768px) {
+  padding: 20px 0;
+flex-direction: column;
 }
+}
+
 .header-buttons-container {
   display: flex;
   gap: 30px;
@@ -35,7 +41,7 @@
 
 /* MOBILE */
 
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   .header-container {
     padding: 0 10px;
   }
@@ -45,10 +51,10 @@
   .header-button-login {
     padding: 9px 30px;
   }
-}
+} */
 
-@media screen and (max-width: 425px) {
+/* @media screen and (max-width: 425px) {
   .header-button-ajuda {
     display: none;
   }
-}
+} */ 

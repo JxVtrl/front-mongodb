@@ -8,37 +8,44 @@ import { useApp } from "@/contexts/contextApi";
 export default function Admin () {
   const [selectedButton, setSelectedButton] = useState<string>("");
   const [routeId, setRouteId] = useState<string>("");
-  const {user, rotas}=useApp()
+  const {user, rotas, setRotas}=useApp()
 
   const [formData, setFormData] = useState({
     origin: "",
     destination: "",
     departureTime: "",
     departureDate: "",
-    ticket: [{}],
   });
   
   const router = useRouter()
-
+  console.log(rotas)
 
   const handleCreateRoute = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData)
 
     try {
-      await axios.post(`/api/rotas/create?id=${rotas.length + 1}`, {
+    console.log(formData)
+      
+      const response = await axios.post("/api/rotas/create", {
         ...formData,
+        departureTime: formData.departureTime + ":00",
       }, {
         headers: {
           "Content-Type": "application/json"
         }
       });
 
-      alert("Rota cadastrada com sucesso");
-      router.push("/");
-      // Redirecionar ou fazer qualquer outra ação necessária após o cadastro
+      if (response.status == 201) {
+      alert("Rota cadastrada com sucesso")
+      }
+      
+      if (response.status == 409) {
+        alert("Rota já cadastrada")
+      }
+      
     } catch (err) {
       console.log(err);
+      alert("Erro ao cadastrar rota")
     }
   };
 
@@ -50,15 +57,18 @@ export default function Admin () {
     }));
   };
 
-  const handleDeleteRoute = async (e: React.FormEvent) => {
+  const handleDeleteRoute = async (e: React.FormEvent, id: number) => {
     e.preventDefault();
 
     try {
       await axios
-        .delete(`/api/rotas/delete?id=${routeId}`)
+        .delete(`/api/rotas/delete?id=${id}`)
         .then(() => {
           alert("Rota deletada com sucesso");
           router.push("/admin")
+        }).finally(() => {
+          const newRotas = rotas.filter((rota) => rota._id !== id);
+          setRotas( newRotas);
         });
     } catch (err) {
       console.log(err);
@@ -88,7 +98,7 @@ export default function Admin () {
   }, [user,router]);
 
   return (
-    <div className="w-screen flex gap-4 flex-col items-center  p-5 justify-center ">
+    <div className="w-screen flex-col md:flex gap-4 items-center  p-5 justify-center ">
       <h1 className="font-bold text-2xl">Página de Admin</h1>
 
       <div className="flex flex-col gap-4">
@@ -141,22 +151,7 @@ export default function Admin () {
               value={formData.departureTime}
               onChange={handleInputChange}
             />
-            {/* <input
-              className="border-2 border-gray-300 rounded-md p-2"
-              placeholder="Horário de chegada"
-              type="text"
-              name="arrivalTime"
-              value={formData.arrivalTime}
-              onChange={handleInputChange}
-            /> */}
-            {/* <input
-              className="border-2 border-gray-300 rounded-md p-2"
-              placeholder="Preço"
-              type="text"
-              name="price"
-              value={formData.ticket}
-              onChange={handleInputChange}
-            /> */}
+          
             <input
               className="border-2 border-gray-300 rounded-md p-2"
               placeholder="Data"
@@ -175,26 +170,35 @@ export default function Admin () {
         </div>
       )}
       {selectedButton === "Apagar rota existente" && (
-        <div>
-          <form
-            className="w-full flex flex-col justify-center gap-4"
-            onSubmit={handleDeleteRoute}
-          >
-            <input
-              value={routeId}
-              onChange={(e) => setRouteId(e.target.value)}
-              className="border-2 border-gray-300 rounded-md p-2"
-              placeholder="Insira o ID da rota"
-              type="text"
-            />
-            <button
-              className="text-center text-red-500 hover:text-red-900"
-              type="submit"
-            >
-              Deletar rota
-            </button>
-          </form>
-        </div>
+        <>
+          {rotas && rotas.map((route) => (
+            <div key={route._id} className="flex justify-between w-full bg-blue-800/10 py-2 px-3 rounded-md items-center" >
+              <p>{route.origin} - {route.destination}</p>
+              <p>{
+                // converter data para o formato americano
+                new Date(route.departureDate).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                }).split("/").reverse().join("-")
+              } - parte às {route.departureTime}h</p>
+              <svg
+                onClick={(e) => {
+                  handleDeleteRoute(e, route._id)
+                  console.log(route)
+                }
+                }
+                className="cursor-pointer"
+                viewBox="0 0 1024 1024"
+                fill="currentColor"
+                height="1em"
+                width="1em"
+    >
+      <path d="M864 256H736v-80c0-35.3-28.7-64-64-64H352c-35.3 0-64 28.7-64 64v80H160c-17.7 0-32 14.3-32 32v32c0 4.4 3.6 8 8 8h60.4l24.7 523c1.6 34.1 29.8 61 63.9 61h454c34.2 0 62.3-26.8 63.9-61l24.7-523H888c4.4 0 8-3.6 8-8v-32c0-17.7-14.3-32-32-32zm-200 0H360v-72h304v72z" />
+    </svg>
+            </div>
+))}
+          </>
       )}
     </div>
   );

@@ -24,14 +24,14 @@ const TripItem: React.FC<TripItemProps> = ({ rota }) => {
         <div>
           <div className="flex items-center justify-center text-center gap-2">
             <h3>
-              <b>{rota.origem}</b> - {format_hour(rota.hora_ida)}
+              <b>{rota.origem}</b> - {format_hour(rota.departureTime)}
             </h3>
             <ArrowRight />
             <h3>
               <b>{rota.destino}</b> - {format_hour(rota.hora_chegada)}
             </h3>
           </div>
-          <p>{format_date(rota.data_ida)}</p>
+          <p>{format_date(rota.departureDate)}</p>
         </div>
         <p className="text-xl font-bold text-green-500">R$ {rota.valor}</p>
       </div>

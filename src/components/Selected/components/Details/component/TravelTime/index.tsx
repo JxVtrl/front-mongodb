@@ -16,7 +16,7 @@ const TravelTime: React.FC = () => {
         <div className="flex items-center gap-2">
           <ClockIcon />
           <div>
-            <span>Partida {format_hour(selectedRoute?.hora_ida)}</span>
+            <span>Partida {format_hour(selectedRoute?.departureTime)}</span>
           </div>
         </div>
         <ArrowRight />
@@ -30,7 +30,7 @@ const TravelTime: React.FC = () => {
       <span>
         Previsão de{" "}
         <b id='duration'>
-          {travelTime(selectedRoute?.hora_ida, selectedRoute?.hora_chegada)}
+          {travelTime(selectedRoute?.departureTime, selectedRoute?.hora_chegada)}
         </b>{" "}
         de viagem
       </span>

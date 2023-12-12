@@ -1,8 +1,8 @@
 import User from "@/models/User"
 import connectMongoDB from "@/assets/lib/database"
 
-export async function POST(requet: Request) {
-  const { searchParams } = new URL(requet.url)
+export async function POST(req: Request) {
+  const { searchParams } = new URL(req.url)
   const id = searchParams.get("id")
 
   if (!id) return new Response("id is required", { status: 400 })

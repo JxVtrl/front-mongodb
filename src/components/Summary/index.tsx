@@ -90,7 +90,7 @@ const Summary: React.FC = () => {
             Passagem de <b>IDA</b>
           </span>
           <div>
-            <span>{selectedRoute?.data_ida}</span>
+            <span>{selectedRoute?.departureDate}</span>
           </div>
         </div>
 
@@ -108,7 +108,7 @@ const Summary: React.FC = () => {
             <div className="flex flex-col items-end">
               <span className="text-md">Saída</span>
               <span className="text-lg font-bold">
-                {format_hour(selectedRoute?.hora_ida)}
+                {format_hour(selectedRoute?.departureTime)}
               </span>
             </div>
           </div>

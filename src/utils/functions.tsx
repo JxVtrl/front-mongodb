@@ -25,6 +25,9 @@ export const random_date = (start: Date, end: Date) => {
 }
 
 export const format_date = (date: string) => {
+  
+  if(!date) return ""
+  
   const dateSplit = date.split("/")
 
   const day = dateSplit[0].toString().padStart(2, "0")
@@ -35,6 +38,11 @@ export const format_date = (date: string) => {
 }
 
 export const format_hour = (hour: string) => {
+  
+  if (!hour) return ""
+  
+  console.log(hour)
+  
   const hourSplit = hour.split(":")
 
   const hourNew = hourSplit[0].toString().padStart(2, "0")
@@ -44,29 +52,29 @@ export const format_hour = (hour: string) => {
 }
 
 export const orderByYearThenByMonthThenByDayThenHour = (a: Rota, b: Rota) => {
-  const data_ida_a = a.data_ida.split(a.data_ida.includes(",") ? "," : "/")
-  const data_ida_b = b.data_ida.split(b.data_ida.includes(",") ? "," : "/")
+  const departureDate_a = a.departureDate.split(a.departureDate.includes(",") ? "," : "/")
+  const departureDate_b = b.departureDate.split(b.departureDate.includes(",") ? "," : "/")
 
-  const hora_ida_a = a.hora_ida.split(":")[0].padStart(2, "0")
-  const hora_ida_b = b.hora_ida.split(":")[0].padStart(2, "0")
+  const departureTime_a = a.departureTime.split(":")[0].padStart(2, "0")
+  const departureTime_b = b.departureTime.split(":")[0].padStart(2, "0")
 
-  const minuto_ida_a = a.hora_ida.split(":")[1].padStart(2, "0")
-  const minuto_ida_b = b.hora_ida.split(":")[1].padStart(2, "0")
+  const minuto_ida_a = a.departureTime.split(":")[1].padStart(2, "0")
+  const minuto_ida_b = b.departureTime.split(":")[1].padStart(2, "0")
 
-  const dia_a = Number(data_ida_a[0].padStart(2, "0"))
-  const dia_b = Number(data_ida_b[0].padStart(2, "0"))
+  const dia_a = Number(departureDate_a[0].padStart(2, "0"))
+  const dia_b = Number(departureDate_b[0].padStart(2, "0"))
 
-  const mes_a = Number(data_ida_a[1].padStart(2, "0"))
-  const mes_b = Number(data_ida_b[1].padStart(2, "0"))
+  const mes_a = Number(departureDate_a[1].padStart(2, "0"))
+  const mes_b = Number(departureDate_b[1].padStart(2, "0"))
 
-  const ano_a = Number(data_ida_a[2])
-  const ano_b = Number(data_ida_b[2])
+  const ano_a = Number(departureDate_a[2])
+  const ano_b = Number(departureDate_b[2])
 
   const data_a = new Date(
-    `${ano_a}-${mes_a}-${dia_a}T${hora_ida_a}:${minuto_ida_a}`
+    `${ano_a}-${mes_a}-${dia_a}T${departureTime_a}:${minuto_ida_a}`
   )
   const data_b = new Date(
-    `${ano_b}-${mes_b}-${dia_b}T${hora_ida_b}:${minuto_ida_b}`
+    `${ano_b}-${mes_b}-${dia_b}T${departureTime_b}:${minuto_ida_b}`
   )
 
   return data_a.getTime() - data_b.getTime()
@@ -107,8 +115,8 @@ export const gerarValor = (min = 0, max = 1000) => {
   return Math.floor(Math.random() * (max - min) + min)
 }
 
-export function travelTime(hora_ida: string, hora_chegada: string) {
-  const [horaIdaHours, horaIdaMinutes] = hora_ida.split(":").map(Number)
+export function travelTime(departureTime: string, hora_chegada: string) {
+  const [horaIdaHours, horaIdaMinutes] = departureTime.split(":").map(Number)
   const [horaChegadaHours, horaChegadaMinutes] = hora_chegada
     .split(":")
     .map(Number)
@@ -176,17 +184,17 @@ export const criar_rotas = async () => {
       .padStart(2, "0")
     let random_year = Math.floor(Math.random() * 2) + 2024
 
-    let data_ida = `${random_day}/${random_month}/${random_year}`
+    let departureDate = `${random_day}/${random_month}/${random_year}`
     let data_chegada = `${random_day}/${random_month}/${random_year}`
 
     let rota: Rota = {
-      id: i,
+      _id: i,
       origem,
       origem_coords,
       destino,
       destino_coords,
-      data_ida,
-      hora_ida: `${Math.floor(Math.random() * 24)}:${Math.floor(
+      departureDate,
+      departureTime: `${Math.floor(Math.random() * 24)}:${Math.floor(
         Math.random() * 60
       )}`,
       data_chegada,
