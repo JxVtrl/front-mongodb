@@ -27,7 +27,8 @@ export default function Admin () {
     console.log(formData)
       
       const response = await axios.post("/api/rotas/create", {
-        formData
+        ...formData,
+        departureTime: formData.departureTime + ":00",
       }, {
         headers: {
           "Content-Type": "application/json"
@@ -66,7 +67,7 @@ export default function Admin () {
           alert("Rota deletada com sucesso");
           router.push("/admin")
         }).finally(() => {
-          const newRotas = rotas.filter((rota) => rota.id !== id);
+          const newRotas = rotas.filter((rota) => rota._id !== id);
           setRotas( newRotas);
         });
     } catch (err) {
@@ -97,7 +98,7 @@ export default function Admin () {
   }, [user,router]);
 
   return (
-    <div className="w-screen flex gap-4 flex-col items-center  p-5 justify-center ">
+    <div className="w-screen flex-col md:flex gap-4 items-center  p-5 justify-center ">
       <h1 className="font-bold text-2xl">Página de Admin</h1>
 
       <div className="flex flex-col gap-4">
@@ -170,12 +171,20 @@ export default function Admin () {
       )}
       {selectedButton === "Apagar rota existente" && (
         <>
-          {rotas.map((route) => (
-            <div key={route.id} className="flex justify-between w-full bg-blue-800/10 py-2 px-3 rounded-md items-center" >
-              <p>{route.origem} - {route.destino}</p>
+          {rotas && rotas.map((route) => (
+            <div key={route._id} className="flex justify-between w-full bg-blue-800/10 py-2 px-3 rounded-md items-center" >
+              <p>{route.origin} - {route.destination}</p>
+              <p>{
+                // converter data para o formato americano
+                new Date(route.departureDate).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                }).split("/").reverse().join("-")
+              } - parte às {route.departureTime}h</p>
               <svg
                 onClick={(e) => {
-                  handleDeleteRoute(e, route.id)
+                  handleDeleteRoute(e, route._id)
                   console.log(route)
                 }
                 }

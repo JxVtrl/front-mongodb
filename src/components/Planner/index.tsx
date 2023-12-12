@@ -42,7 +42,7 @@ const Planner: React.FC = () => {
       (rota) =>
         rota.origem === data.origem &&
         rota.destino === data.destino &&
-        rota.data_ida === dataReverse
+        rota.departureDate === dataReverse
     )
     
     // Se não existir, mostrar mensagem de erro

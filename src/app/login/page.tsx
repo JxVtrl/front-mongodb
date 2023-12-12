@@ -57,9 +57,9 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div className="login-page-wrapper">
+    <div className="login-page-wrapper ">
       <Logo />
-      <div className="login-form-wrapper">
+      <div className="login-form-wrapper ">
         <form className="login-form" onSubmit={handleSubmit(OnSubmit)}>
           <h2>Login</h2>
           <div className="input-error-wrapper">

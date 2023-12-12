@@ -18,10 +18,10 @@ const Header: React.FC = () => {
   if (pathname === "/login" || pathname === "/register") return null;
 
   return (
-    <section className="header-sec">
-      <div className="header-container">
+    <section>
+      <div className="flex items-center px-5 py-2 justify-between md:items-center  w-full">
         <Link href="/">
-          <div className="header-logo-container">
+          <div className="">
             <svg
               width="174"
               height="45"
@@ -43,22 +43,11 @@ const Header: React.FC = () => {
           </div>
         </Link>
         {!user ? (
-          <div className="header-buttons-container">
+          <div className="">
             <Link href="/login">
-              <button className="header-button-login">ENTRAR</button>
+              <button className="bg-[#213a5c] px-2 py-1 text-white rounded-lg transition-all hover:bg-[#213a5c]/90 duration-200">
+              <p className="text-md">Entrar</p></button>
             </Link>
-            <button
-              onMouseOver={() => {
-                setShowHelpBox(true);
-              }}
-              onMouseLeave={() => {
-                setShowHelpBox(false);
-              }}
-              className="header-button-ajuda"
-            >
-              ?
-            </button>
-            {showHelpBox && <HelpBox />}
           </div>
         ) : (
           <div className="w-full flex items-center justify-end gap-5 p-4">
@@ -83,7 +72,7 @@ const Header: React.FC = () => {
             </div>
             {user.role === "admin" && (
               <button
-                className="w-fit bg-[#213a5c] hover:bg-[#213a5c]/90 rounded-md text-white font-bold py-2 px-4"
+                className="hidden md:block w-fit bg-[#213a5c] hover:bg-[#213a5c]/90 rounded-md text-white font-bold py-2 px-4"
                 onClick={() => {
                   router.push("/admin");
                 }}
@@ -92,7 +81,7 @@ const Header: React.FC = () => {
               </button>
             )}
             <button
-              className="w-fit bg-[#213a5c] hover:bg-[#213a5c]/90 rounded-md text-white font-bold py-2 px-4"
+              className="hidden md:block w-fit bg-[#213a5c] hover:bg-[#213a5c]/90 rounded-md text-white font-bold py-2 px-4"
               onClick={() => {
                 router.push("/tickets");
               }}
