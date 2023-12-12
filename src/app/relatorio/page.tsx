@@ -20,17 +20,19 @@ const Page: React.FC = () => {
         window.open(encodedUri)
     }
     
-    return <div>
+    return <div className='
+        flex flex-col
+        w-full h-full
+        p-4
+'>
         
-        <header>
-            {/* make a excel download */}
             <button onClick={downloadRouteContentExcel}>Download</button>
-        </header>
         
         
         
         {/* select da rota */}
         <select
+    
             onChange={e => {
                 const selectedRoute = rotas.find(rota => rota._id === e.target.value)
                 setSelectedRoute(selectedRoute!)
@@ -43,7 +45,14 @@ const Page: React.FC = () => {
         </select>
         
         {/* tabela com os passageiros */}
-        <table>
+        <table className='
+            w-full
+            border-collapse
+            border-2
+            border-gray-500
+            mt-4
+
+'>
             <thead>
                 <tr>
                     <th>Numero</th>
