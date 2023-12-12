@@ -102,7 +102,7 @@ const Summary: React.FC = () => {
                 <span className="text-md">Origem</span>
               </div>
               <span className="text-lg font-bold ml-8">
-                {selectedRoute?.origem}
+                {selectedRoute?.origin}
               </span>
             </div>
             <div className="flex flex-col items-end">
@@ -120,13 +120,13 @@ const Summary: React.FC = () => {
                 <span className="text-md">Destino</span>
               </div>
               <span className="text-lg font-bold ml-8">
-                {selectedRoute?.origem}
+                {selectedRoute?.origin}
               </span>
             </div>
             <div className="flex flex-col items-end">
               <span className="text-md">Chegada</span>
               <span className="text-lg font-bold">
-                {format_hour(selectedRoute.arrive_time)}
+                {format_hour(selectedRoute.arrive_time || "00:00")}
               </span>
             </div>
           </div>
