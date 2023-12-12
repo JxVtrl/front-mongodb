@@ -1,29 +1,23 @@
 import Route from "@/models/Route"
 import connectMongoDB from "@/assets/lib/database"
 
-export async function POST(req: any, res: any) {
-  const { searchParams } = new URL(req.url)
-  const id = searchParams.get("id")
-
-
-  const { origin, destination, departureTime, departureDate, tickets} = req.body
-  
-  console.log("d: ", destination)
-  console.log("o: ", origin)
-
-  if (!id) return new Response("id is required", { status: 203 })
+export async function POST(req: Request, res: Response) {
+  const { origin, destination, departureTime, departureDate} = await req.json()
 
   try {
     await connectMongoDB()
-    console.log(id)
-    console.log('aaa')
+    
+    const alreadyExists = await Route.findOne({ origin, destination, departureTime, departureDate })
+    
+    if (alreadyExists) {
+      return new Response("Rota já cadastrada", { status: 409 })
+    }
 
     const route = await Route.create({
       origin,
       destination,
       departureTime,
       departureDate,
-      tickets,
     })
 
 

@@ -21,6 +21,7 @@ interface ContextProps {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   rotas: Rota[];
+  setRotas: React.Dispatch<React.SetStateAction<Rota[]>>;
   selectedRoute: Rota | null;
   setSelectedRoute: React.Dispatch<React.SetStateAction<Rota | null>>;
   selectSeatModal: boolean;
@@ -94,18 +95,18 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [userProfileImage, setUserProfileImage] = useState<string>('');
 
-  const fetchRotas = async () => {
-    const rotas_local = localStorage.getItem("rotas");
+  // const fetchRotas = async () => {
+  //   const rotas_local = localStorage.getItem("rotas");
 
-    let used_routes = JSON.parse(rotas_local || "[]");
+  //   let used_routes = JSON.parse(rotas_local || "[]");
 
-    if (!rotas_local) used_routes = await criar_rotas();
-    localStorage.setItem("rotas", JSON.stringify(used_routes));
+  //   if (!rotas_local) used_routes = await criar_rotas();
+  //   localStorage.setItem("rotas", JSON.stringify(used_routes));
 
-    used_routes.sort(orderByYearThenByMonthThenByDayThenHour);
+  //   used_routes.sort(orderByYearThenByMonthThenByDayThenHour);
 
-    setRotas(used_routes);
-  };
+  //   setRotas(used_routes);
+  // };
 
   const getRotas = async () => {
     const url = `/api/rotas/all`;
@@ -116,8 +117,8 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    // getRotas()
-    fetchRotas();
+    getRotas()
+    // fetchRotas();
   }, []);
 
   useEffect(() => {
@@ -132,6 +133,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     user,
     setUser,
     rotas,
+    setRotas,
     selectedRoute,
     setSelectedRoute,
     selectSeatModal,
