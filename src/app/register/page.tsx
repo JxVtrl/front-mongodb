@@ -27,7 +27,25 @@ const Register: React.FC = () => {
   } = useForm<FormData>()
   const router = useRouter()
 
+  const isMediaDeviceMobile = window.matchMedia("(max-width: 768px)").matches
+
   const onSubmit = async (data: FormData) => {
+    if (
+      errors.name ||
+      errors.email ||
+      errors.password ||
+      errors.confirmPassword
+    )
+      return
+    if (watch("password") !== watch("confirmPassword")) return
+    if (
+      !watch("name") ||
+      !watch("email") ||
+      !watch("password") ||
+      !watch("confirmPassword")
+    )
+      return
+
     setLoading(true)
     try {
       const user = await registro(data)
@@ -42,6 +60,9 @@ const Register: React.FC = () => {
         if (user.role === "admin") {
           localStorage.setItem("userType", user.role)
         }
+        if (isMediaDeviceMobile) {
+          router.push("/")
+        } else setStep(1)
       } else throw new Error("Erro ao cadastrar usuário")
     } catch (err) {
       console.log(err)
@@ -180,24 +201,6 @@ const Register: React.FC = () => {
 
               <input
                 className="register-form-button register-form-input"
-                onClick={() => {
-                  if (
-                    errors.name ||
-                    errors.email ||
-                    errors.password ||
-                    errors.confirmPassword
-                  )
-                    return
-                  if (watch("password") !== watch("confirmPassword")) return
-                  if (
-                    !watch("name") ||
-                    !watch("email") ||
-                    !watch("password") ||
-                    !watch("confirmPassword")
-                  )
-                    return
-                  setStep(1)
-                }}
                 type="submit"
                 disabled={loading}
                 value={loading ? "Carregando..." : "Cadastrar e configurar"}
