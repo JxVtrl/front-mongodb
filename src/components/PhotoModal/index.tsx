@@ -18,14 +18,12 @@ const PhotoModal = () => {
   const isFaceCenteredRef = useRef<boolean>(false);
 
   const loadModels = useCallback(async () => {
-    console.log("Carregando modelos...");
     const MODEL_URL = "/models";
     try {
       await faceApi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
       await faceApi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
       await faceApi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
       await faceApi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-      console.log("Modelos carregados com sucesso.");
     } catch (error) {
       console.error("Erro ao carregar modelos:", error);
       console.error("A detecção facial não funcionará corretamente.");
@@ -33,13 +31,11 @@ const PhotoModal = () => {
   }, []);
 
   const startVideo = useCallback(async () => {
-    console.log("Iniciando vídeo...");
     const video = videoRef.current;
     if (video) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
         video.srcObject = stream;
-        console.log("Vídeo iniciado com sucesso.");
       } catch (err) {
         console.error("Erro ao iniciar o vídeo:", err);
       }
@@ -85,7 +81,6 @@ const PhotoModal = () => {
       );
 
       const data = await response.json();
-      console.log(data);
       setPhotoModalUrl(data.secure_url);
       
       
@@ -97,7 +92,7 @@ const PhotoModal = () => {
       };
       
       // update user
-      const res = await fetch(
+      await fetch(
         '/api/face/new',
         {
           method: "POST",
@@ -110,10 +105,6 @@ const PhotoModal = () => {
         }
       );
       
-      const redData = await res.json();
-      console.log(redData)
-      
-      console.log("A foto foi enviada com sucesso!");
     } catch (error) {
       console.error("Erro ao enviar a foto:", error);
     } finally {

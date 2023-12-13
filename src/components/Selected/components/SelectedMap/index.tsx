@@ -10,8 +10,6 @@ type SelectedMapProps = {
 const SelectedMap: React.FC<SelectedMapProps> = ({ route }) => {
   const mapRef = React.useRef<HTMLDivElement>(null);
 
-  console.log(route);
-
   const initMap = async (
     origin: {
       lat: any;
@@ -31,7 +29,6 @@ const SelectedMap: React.FC<SelectedMapProps> = ({ route }) => {
       !destination.lng ||
       !destination.lat
     ) {
-      console.log("origin or destination is null");
       const newOrigin = await getCoordsInGoogleMaps(route.origin);
       const newDestination = await getCoordsInGoogleMaps(route.destination);
 

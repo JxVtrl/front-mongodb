@@ -1,12 +1,12 @@
 import Route from "@/models/Route"
 import connectMongoDB from "@/assets/lib/database"
-import { getCoordsInGoogleMaps } from "@/utils/functions"
+import { getCoordsInGoogleMaps, getDurationTimeInGoogleMaps } from "@/utils/functions"
 
 export async function POST(req: Request, res: Response) {
 
   try {
     
-  const { origin,origin_coords, destination, destination_coords,departureTime, departureDate, value } = await req.json()
+  const { origin,destination, departureTime, departureDate, value } = await req.json()
 
     
     await connectMongoDB()
@@ -26,13 +26,29 @@ export async function POST(req: Request, res: Response) {
       })
     }    
 
+    const duration = await getDurationTimeInGoogleMaps(origin, destination)
+    
+    const arrive_date = new Date(departureDate)
+    arrive_date.setSeconds(arrive_date.getSeconds() + duration)
+    const arrive_time = arrive_date.toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+    const arrive_date_formatted = arrive_date.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    })
+
     const route = await Route.create({
       origin,
       origin_coords: getCoordsInGoogleMaps(origin),
       destination,
       destination_coords: getCoordsInGoogleMaps(destination),
-      departureTime,
+      departureTime, 
       departureDate,
+      arrive_date: arrive_date_formatted,
+      arrive_time: arrive_time,
       value,
       seats
     })

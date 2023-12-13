@@ -42,7 +42,6 @@ export default function FaceIdWidget() {
   // }, []);
 
   const loadModels = useCallback(async () => {
-    console.log("Carregando modelos...");
     setVideoLoading(true);
     const MODEL_URL = "/models";
     try {
@@ -50,7 +49,6 @@ export default function FaceIdWidget() {
       await faceApi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
       await faceApi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
       await faceApi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-      console.log("Modelos carregados com sucesso.");
 
       const resFacesList = await fetch('/api/face/all',
         {
@@ -66,8 +64,6 @@ export default function FaceIdWidget() {
       const augmentedMockFacesList =
         (await facesListInDifferentAngles(resList)) || [];
 
-      console.log("Lista de faces mockadas:", augmentedMockFacesList);
-
       const labeledMockFaceDescriptors = augmentedMockFacesList.map((face) => {
         return new faceApi.LabeledFaceDescriptors(
           face.name,
@@ -75,15 +71,8 @@ export default function FaceIdWidget() {
         );
       });
 
-      console.log("Descritores de faces mockadas:", labeledMockFaceDescriptors);
-
       const labeledMockFaceDescriptorsResolved = await Promise.all(
         labeledMockFaceDescriptors
-      );
-
-      console.log(
-        "Descritores de faces mockadas resolvidos:",
-        labeledMockFaceDescriptorsResolved
       );
 
       if (labeledMockFaceDescriptorsResolved.length > 0) {
@@ -105,13 +94,11 @@ export default function FaceIdWidget() {
   }, []);
 
   const startVideo = useCallback(async () => {
-    console.log("Iniciando vídeo...");
     const video = videoRef.current;
     if (video) {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: {} });
         video.srcObject = stream;
-        console.log("Vídeo iniciado com sucesso.");
       } catch (err) {
         console.error("Erro ao iniciar o vídeo:", err);
       }
@@ -233,8 +220,6 @@ export default function FaceIdWidget() {
             
             
             const response = await axios.get('/api/auth/all_users')
-            console.log(response.data)
-            
             // get user detected
             const user = response.data.find((user: any) => user.name === text)
             

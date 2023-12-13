@@ -25,13 +25,9 @@ export default function Admin () {
   const handleCreateRoute = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log(getCoordsInGoogleMaps(formData.destination))
-    
     const destination_coords = await getCoordsInGoogleMaps(formData.destination)
     const origin_coords = await getCoordsInGoogleMaps(formData.origin)
     
-    console.log(destination_coords,origin_coords)
-
     try {
       
       const response = await axios.post("/api/rotas/create", {

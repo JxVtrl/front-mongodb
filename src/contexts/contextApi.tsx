@@ -121,9 +121,7 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getRotas = async () => {
     const url = `/api/rotas/all`;
-
     const res = await axios.get(url);
-    console.log("Rotas disponiveis: " + res.data);
     setRotas(res.data);
   };
 
