@@ -12,7 +12,6 @@ const routeSchema = new Schema({
   },
   departureDate: {
     type: String,
-    // default: Date.now,
   },
   origin_coords: {
     lat: {

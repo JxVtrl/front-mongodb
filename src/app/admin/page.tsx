@@ -33,9 +33,9 @@ export default function Admin () {
       const response = await axios.post("/api/rotas/create", {
         ...formData,
         departureTime: formData.departureTime + ":00",
-        departureDate: new Date(formData.departureDate).toISOString(),
-        destination_coords: destination_coords,
-        origin_coords: origin_coords,
+        departureDate: formData.departureDate,
+        destination_coords,
+        origin_coords
       }, {
         headers: {
           "Content-Type": "application/json"

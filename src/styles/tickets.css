@@ -1,0 +1,15 @@
+.card-passagem-wrapper{
+    display: flex;
+    justify-content: center;
+}
+.card-passagem-infos{
+    border: 1px solid rgb(229 231 235);
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    padding: 5px;
+}

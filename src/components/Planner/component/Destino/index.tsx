@@ -1,5 +1,6 @@
 import React from "react"
 import { FormValues } from "../.."
+import { useApp } from "@/contexts/contextApi"
 
 type Props = {
   value: FormValues
@@ -7,26 +8,31 @@ type Props = {
     register:any
   errors:any
 }
-const Destino: React.FC<Props> = ({ setValue, value,errors,register }) => {
+const Destino: React.FC<Props> = ({ setValue, value, errors, register }) => {
+  const { rotas } = useApp()
+  
+  
+  // select com rotas
   return (
-    <div className="flex relative h-[65px]">
-      <input
+    <div className="wrapper-input flex flex-col h-[65px] relative">
+      <select
         className="input"
-        type="text"
-        placeholder="Destino"
-        {...register("destino", {
-          required: "Destino é obrigatório",
-        })}
+        {...register("destino", { required: "Destino é obrigatório" })}
         value={value.destino}
         onChange={(e) => setValue({ ...value, destino: e.target.value })}
-      />
+      >
+        <option value="">Destino</option>
+        {rotas.map((rota,index) => {
+          return <option key={index} value={rota.destination}>{rota.destination}</option>
+        })}
+      </select>
       {errors.destino && (
         <span className="error-message-home destiny-error">
           {errors.destino.message}
         </span>
       )}
     </div>
-  )
+  ) 
 }
 
 export default Destino

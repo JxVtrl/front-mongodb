@@ -1,22 +1,32 @@
 import Route from "@/models/Route"
 import connectMongoDB from "@/assets/lib/database"
-import { getCoordsInGoogleMaps, getDurationTimeInGoogleMaps } from "@/utils/functions"
+import { getDurationTimeInGoogleMaps } from "@/utils/functions"
 
 export async function POST(req: Request, res: Response) {
-
   try {
-    
-  const { origin,destination, departureTime, departureDate, value } = await req.json()
+    const {
+      origin,
+      origin_coords,
+      destination,
+      destination_coords,
+      departureTime,
+      departureDate,
+      value,
+    } = await req.json()
 
-    
     await connectMongoDB()
-    
-    const alreadyExists = await Route.findOne({ origin, destination, departureTime, departureDate })
-    
+
+    const alreadyExists = await Route.findOne({
+      origin,
+      destination,
+      departureTime,
+      departureDate,
+    })
+
     if (alreadyExists) {
       return new Response("Rota já cadastrada", { status: 409 })
     }
-    
+
     let seats = []
     for (let i = 0; i < 40; i++) {
       seats.push({
@@ -24,12 +34,12 @@ export async function POST(req: Request, res: Response) {
         numero: i + 1,
         ocupado: false,
       })
-    }    
+    }
 
     const duration = await getDurationTimeInGoogleMaps(origin, destination)
     
     const arrive_date = new Date(departureDate)
-    arrive_date.setSeconds(arrive_date.getSeconds() + duration)
+    arrive_date.setSeconds(Number(arrive_date.getSeconds() + duration))
     const arrive_time = arrive_date.toLocaleTimeString("pt-BR", {
       hour: "2-digit",
       minute: "2-digit",
@@ -42,17 +52,16 @@ export async function POST(req: Request, res: Response) {
 
     const route = await Route.create({
       origin,
-      origin_coords: getCoordsInGoogleMaps(origin),
+      origin_coords,
       destination,
-      destination_coords: getCoordsInGoogleMaps(destination),
-      departureTime, 
+      destination_coords,
+      departureTime,
       departureDate,
       arrive_date: arrive_date_formatted,
       arrive_time: arrive_time,
       value,
-      seats
+      seats,
     })
-
 
     if (!route) {
       return new Response("Rota não encontrada", { status: 204 })

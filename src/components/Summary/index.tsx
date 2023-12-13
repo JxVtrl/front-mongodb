@@ -5,7 +5,7 @@ import { useApp } from "@/contexts/contextApi";
 import { format_hour } from "@/utils/functions";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 const Summary: React.FC = () => {
   const {
@@ -20,7 +20,14 @@ const Summary: React.FC = () => {
     validCpf,
   } = useApp();
 
-  console.log('user', user)
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (cardRef.current) {
+      const cardHtml = cardRef.current.innerHTML;
+      localStorage.setItem("cardPassagem", cardHtml);
+    }
+  }, [passengersInfo, selectedRoute]); 
 
   const [loading, setLoading] = React.useState(false);
 
@@ -82,7 +89,7 @@ const Summary: React.FC = () => {
 
 
       setTimeout(() => {
-        router.push('/')
+        router.push("/");
       }, 1500);
 
       setTimeout(() => {
@@ -103,7 +110,10 @@ const Summary: React.FC = () => {
         <span className="text-2xl font-bold">Resumo da compra</span>
       </div>
 
-      <div className="flex flex-col gap-2 p-4 bg-white rounded-xl shadow-md">
+      <div
+        ref={cardRef}
+        className="flex flex-col gap-2 p-4 bg-white rounded-xl shadow-md"
+      >
         <div className="flex w-full justify-between items-center border-b-2 border-gray-200 pb-2">
           <span>
             Passagem de <b>IDA</b>
@@ -191,7 +201,9 @@ const Summary: React.FC = () => {
           ? !checkIfPassengersInfoIsFilled()
             ? "Preencha os dados"
             : "Continuar"
-          : compraRealizada ? 'Obrigado!' :"Finalizar compra"}
+          : compraRealizada
+          ? "Obrigado!"
+          : "Finalizar compra"}
       </button>
     </div>
   );
